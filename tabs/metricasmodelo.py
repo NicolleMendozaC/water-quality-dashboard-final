@@ -108,8 +108,10 @@ def layout() -> html.Div:
         dbc.Row(dbc.Col([
             html.H2("📈 Métricas del Modelo", className="fw-bold mb-1",
                     style={"color": "#2c3e50"}),
-            html.P("Evaluación del desempeño de la Regresión Logística "
-                   "sobre el conjunto de prueba.", className="text-muted"),
+            html.P(
+    "Evaluación del modelo de Regresión Logística entrenado sobre un conjunto de datos balanceado mediante SMOTE.",
+    className="text-muted",
+),
             html.Hr(),
         ]), className="mb-4"),
 
@@ -120,7 +122,18 @@ def layout() -> html.Div:
             dbc.Col(_badge("Recall",    m["recall"],    PASTEL[3]), md=3),
             dbc.Col(_badge("F1-Score",  m["f1"],        PASTEL[4]), md=3),
         ], className="mb-4 g-3"),
-
+dbc.Row(
+    dbc.Col(
+        dbc.Alert([
+            html.H5("✅ Modelo entrenado con SMOTE", className="alert-heading"),
+            html.P(
+                "Antes del entrenamiento se aplicó SMOTE para equilibrar las clases de la variable objetivo. "
+                "Esto permitió reducir el sesgo hacia la clase mayoritaria y mejorar la capacidad de clasificación."
+            ),
+        ], color="info"),
+    ),
+    className="mb-4",
+),
         dbc.Row(dbc.Col(dbc.Card(dbc.CardBody([
             html.Div([
                 html.Span("ROC-AUC: ", className="fw-bold"),
@@ -149,6 +162,25 @@ def layout() -> html.Div:
                 )
             ), style=CARD_STYLE), md=5),
         ], className="mb-4 g-3"),
+        dbc.Row(
+    dbc.Col(
+        dbc.Card(
+            dbc.CardBody([
+                html.H5("📊 Interpretación de la Curva ROC", className="fw-bold"),
+                html.P(
+                    "La curva ROC muestra la capacidad del modelo para diferenciar entre las clases "
+                    "Ácido y Neutro/Alcalino en distintos umbrales de decisión."
+                ),
+                html.P(
+                    "El valor AUC obtenido indica una excelente capacidad discriminativa, "
+                    "confirmando que el modelo mantiene un buen equilibrio entre sensibilidad y especificidad."
+                ),
+            ]),
+            style=CARD_STYLE,
+        )
+    ),
+    className="mb-4",
+),
 
         # ── Interpretación ────────────────────────────────────────────────────
         dbc.Row(dbc.Col(dbc.Card([
@@ -157,9 +189,11 @@ def layout() -> html.Div:
             dbc.CardBody(dbc.Row([
                 dbc.Col([
                     html.H6("Accuracy", className="fw-bold"),
-                    html.P("Porcentaje total de predicciones correctas. "
-                           "Es la métrica más intuitiva pero puede ser engañosa "
-                           "con clases desbalanceadas.", className="small"),
+                    html.P(
+    "Porcentaje total de predicciones correctas. Después del balanceo mediante SMOTE, "
+    "esta métrica representa de forma más confiable el desempeño general del modelo.",
+    className="small",
+),
                 ], md=3),
                 dbc.Col([
                     html.H6("Precision", className="fw-bold"),

@@ -48,17 +48,18 @@ _NUMERIC = ["ph", "temperature_c", "turbidity_ntu",
 def _load_df() -> pd.DataFrame:
     df = pd.read_csv(DATA_PATH)
     df = df.rename(columns=_RENAME)
-    # Crear columna binaria si no existe
-    if "ph_category" not in df.columns:
+
+    # Utilizar la columna creada durante el preprocesamiento
+    if "pH_categoria" in df.columns:
+        df["ph_category"] = df["pH_categoria"].replace({
+            0: "Ácido",
+            1: "Neutro/Alcalino"
+        })
+    else:
         df["ph_category"] = df["ph"].apply(
             lambda x: "Neutro/Alcalino" if x >= 7.0 else "Ácido"
         )
-    else:
-        df["ph_category"] = df["ph_category"].map(
-            {1: "Neutro/Alcalino", 0: "Ácido"}
-        ).fillna(
-            df["ph"].apply(lambda x: "Neutro/Alcalino" if x >= 7.0 else "Ácido")
-        )
+
     return df
 
 

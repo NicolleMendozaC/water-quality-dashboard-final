@@ -6,152 +6,536 @@ Pestaña 1 – Contexto del Problema e Impacto Empresarial
 import dash_bootstrap_components as dbc
 from dash import html
 
-# ── Paleta pastel ─────────────────────────────────────────────────────────────
-BLUE   = "#AED9E0"
-GREEN  = "#B5EAD7"
+# ───────────────────────────────────────────────────────────────
+# Colores
+# ───────────────────────────────────────────────────────────────
+
+BLUE = "#AED9E0"
+GREEN = "#B5EAD7"
 YELLOW = "#FFDAC1"
-PINK   = "#FFB7B2"
+PINK = "#FFB7B2"
 PURPLE = "#C7CEEA"
 
 CARD_STYLE = {
-    "border"      : "none",
+    "border": "none",
     "borderRadius": "16px",
-    "boxShadow"   : "0 4px 12px rgba(0,0,0,0.08)",
+    "boxShadow": "0 4px 12px rgba(0,0,0,0.08)",
 }
 
 
-def _kpi_card(icon: str, title: str, value: str, color: str) -> dbc.Card:
+def _kpi_card(icon, title, value, color):
     return dbc.Card(
-        dbc.CardBody([
-            html.Div(icon, style={"fontSize": "2rem"}),
-            html.H4(value, className="mt-2 mb-0 fw-bold"),
-            html.P(title, className="text-muted small"),
-        ], className="text-center py-3"),
+        dbc.CardBody(
+            [
+                html.Div(icon, style={"fontSize": "2rem"}),
+                html.H4(value, className="fw-bold mt-2 mb-0"),
+                html.P(title, className="text-muted small"),
+            ],
+            className="text-center py-3",
+        ),
         style={**CARD_STYLE, "backgroundColor": color},
     )
 
 
-def layout() -> html.Div:
-    """Retorna el layout completo de la pestaña Contexto del Problema."""
-    return html.Div([
+def layout():
 
-        # ── Encabezado ────────────────────────────────────────────────────────
-        dbc.Row(dbc.Col(html.Div([
-            html.H2("💧 Calidad del Agua – Análisis de pH",
-                    className="fw-bold mb-1", style={"color": "#2c3e50"}),
-            html.P("Dashboard analítico para monitoreo y clasificación "
-                   "de la calidad del agua mediante machine learning.",
-                   className="text-muted"),
-            html.Hr(),
-        ])), className="mb-4"),
+    return html.Div(
 
-        # ── KPIs ─────────────────────────────────────────────────────────────
-        dbc.Row([
-            dbc.Col(_kpi_card("🌍", "Personas sin agua segura", "2.2 B", BLUE),   md=3),
-            dbc.Col(_kpi_card("⚠️", "Muertes anuales por agua", "1.4 M", PINK),   md=3),
-            dbc.Col(_kpi_card("🏭", "Sectores afectados",       "4+",    YELLOW), md=3),
-            dbc.Col(_kpi_card("📉", "Reducción de costos (ML)", "35 %",  GREEN),  md=3),
-        ], className="mb-5 g-3"),
+        [
 
-        # ── Descripción del problema ──────────────────────────────────────────
-        dbc.Row([
-            dbc.Col(dbc.Card([
-                dbc.CardHeader(html.H5("🔬 ¿Por qué importa el pH?",
-                                       className="mb-0 fw-bold")),
-                dbc.CardBody([
-                    html.P([
-                        "El ", html.Strong("pH"), " es uno de los indicadores más críticos "
-                        "de la calidad del agua. Un rango fuera de ", html.Strong("6.5 – 8.5"),
-                        " puede comprometer la salud pública, dañar equipos industriales "
-                        "y alterar ecosistemas acuáticos."
-                    ]),
-                    html.Ul([
-                        html.Li("pH < 6.5 → agua ácida: corrosiva, potencialmente tóxica."),
-                        html.Li("pH 6.5 – 8.5 → rango seguro según la OMS."),
-                        html.Li("pH > 8.5 → alcalinidad elevada: sabor amargo, incrustaciones."),
-                    ]),
-                ])
-            ], style=CARD_STYLE), md=6),
+            dbc.Row(
 
-            dbc.Col(dbc.Card([
-                dbc.CardHeader(html.H5("🏢 Impacto Empresarial",
-                                       className="mb-0 fw-bold")),
-                dbc.CardBody([
-                    html.P("La detección temprana de anomalías en el pH genera valor "
-                           "en múltiples sectores:"),
-                    dbc.ListGroup([
-                        dbc.ListGroupItem("🚰 Acueductos: garantizar agua potable y cumplir normativa."),
-                        dbc.ListGroupItem("🏭 Industria: evitar corrosión en tuberías y equipos."),
-                        dbc.ListGroupItem("🐟 Acuicultura: mantener ecosistemas saludables."),
-                        dbc.ListGroupItem("🧪 Laboratorios: optimizar procesos de tratamiento."),
-                    ], flush=True, style={"borderRadius": "8px"}),
-                ])
-            ], style=CARD_STYLE), md=6),
-        ], className="mb-4 g-3"),
+                dbc.Col(
 
-        # ── Metodología resumida ──────────────────────────────────────────────
-        dbc.Row(dbc.Col(dbc.Card([
-            dbc.CardHeader(html.H5("🤖 Solución Propuesta con ML",
-                                   className="mb-0 fw-bold")),
-            dbc.CardBody([
-                dbc.Row([
-                    dbc.Col([
-                        html.Div("📊", style={"fontSize": "2.5rem"}),
-                        html.H6("1. Recolección de Datos", className="fw-bold mt-1"),
-                        html.P("Medición de variables fisicoquímicas: pH, temperatura, "
-                               "turbidez, oxígeno disuelto y conductividad.",
-                               className="small text-muted"),
-                    ], md=3, className="text-center"),
-                    dbc.Col([
-                        html.Div("🔍", style={"fontSize": "2.5rem"}),
-                        html.H6("2. Análisis Exploratorio", className="fw-bold mt-1"),
-                        html.P("Visualización de distribuciones, correlaciones y "
-                               "patrones para entender la naturaleza de los datos.",
-                               className="small text-muted"),
-                    ], md=3, className="text-center"),
-                    dbc.Col([
-                        html.Div("🧠", style={"fontSize": "2.5rem"}),
-                        html.H6("3. Modelado Predictivo", className="fw-bold mt-1"),
-                        html.P("Regresión Logística para clasificar el pH como "
-                               "Ácido (< 7.0) o Neutro/Alcalino (≥ 7.0).",
-                               className="small text-muted"),
-                    ], md=3, className="text-center"),
-                    dbc.Col([
-                        html.Div("✅", style={"fontSize": "2.5rem"}),
-                        html.H6("4. Predicción en Tiempo Real", className="fw-bold mt-1"),
-                        html.P("Formulario interactivo para predecir la categoría "
-                               "de una nueva muestra de agua.",
-                               className="small text-muted"),
-                    ], md=3, className="text-center"),
-                ])
-            ])
-        ], style=CARD_STYLE)), className="mb-4"),
+                    [
 
-        # ── Variables del dataset ─────────────────────────────────────────────
-        dbc.Row(dbc.Col(dbc.Card([
-            dbc.CardHeader(html.H5("📋 Variables del Dataset",
-                                   className="mb-0 fw-bold")),
-            dbc.CardBody(
-                dbc.Table([
-                    html.Thead(html.Tr([
-                        html.Th("Variable"), html.Th("Unidad"),
-                        html.Th("Rango Típico"), html.Th("Rol"),
-                    ])),
-                    html.Tbody([
-                        html.Tr([html.Td("pH"),               html.Td("adimensional"),
-                                 html.Td("6.5 – 8.5"),        html.Td("🎯 Variable respuesta")]),
-                        html.Tr([html.Td("Temperatura"),      html.Td("°C"),
-                                 html.Td("15 – 35"),          html.Td("Predictora")]),
-                        html.Tr([html.Td("Turbidez"),         html.Td("NTU"),
-                                 html.Td("0.5 – 10"),         html.Td("Predictora")]),
-                        html.Tr([html.Td("Oxígeno Disuelto"), html.Td("mg/L"),
-                                 html.Td("5 – 12"),           html.Td("Predictora")]),
-                        html.Tr([html.Td("Conductividad"),    html.Td("µS/cm"),
-                                 html.Td("200 – 600"),        html.Td("Predictora")]),
-                    ]),
-                ], bordered=True, hover=True, responsive=True, striped=True,
-                   className="mb-0")
-            )
-        ], style=CARD_STYLE))),
+                        html.H2(
+                            "💧 Predicción de la Calidad del Agua mediante Machine Learning",
+                            className="fw-bold",
+                            style={"color": "#2c3e50"},
+                        ),
 
-    ], style={"padding": "24px"})
+                        html.P(
+                            "Este dashboard presenta el desarrollo de un modelo de Machine Learning "
+                            "para clasificar muestras de agua según su categoría de pH utilizando "
+                            "variables fisicoquímicas como temperatura, turbidez, oxígeno disuelto "
+                            "y conductividad.",
+                            className="text-muted",
+                        ),
+
+                        html.Hr(),
+
+                    ]
+
+                )
+
+            ),
+
+            dbc.Row(
+
+                [
+
+                    dbc.Col(
+                        _kpi_card("🌍", "Personas sin agua segura", "2.2 B", BLUE),
+                        md=3,
+                    ),
+
+                    dbc.Col(
+                        _kpi_card("⚠️", "Muertes anuales", "1.4 M", PINK),
+                        md=3,
+                    ),
+
+                    dbc.Col(
+                        _kpi_card("🏭", "Sectores impactados", "4+", YELLOW),
+                        md=3,
+                    ),
+
+                    dbc.Col(
+                        _kpi_card("🤖", "Modelo ML", "Logística", GREEN),
+                        md=3,
+                    ),
+
+                ],
+
+                className="mb-4 g-3",
+
+            ),
+
+            dbc.Row(
+
+                [
+
+                    dbc.Col(
+
+                        dbc.Card(
+
+                            [
+
+                                dbc.CardHeader(
+
+                                    html.H5(
+                                        "🔬 ¿Por qué importa el pH?",
+                                        className="fw-bold mb-0",
+                                    )
+
+                                ),
+
+                                dbc.CardBody(
+
+                                    [
+
+                                        html.P(
+                                            "El pH representa el nivel de acidez o alcalinidad del agua. "
+                                            "Es uno de los indicadores más importantes para evaluar su calidad."
+                                        ),
+
+                                        html.P(
+                                            "Un pH fuera del rango recomendado puede afectar la salud humana, "
+                                            "provocar corrosión en tuberías y alterar los ecosistemas acuáticos."
+                                        ),
+
+                                        html.Ul(
+
+                                            [
+
+                                                html.Li(
+                                                    "pH < 6.5: agua ácida."
+                                                ),
+
+                                                html.Li(
+                                                    "pH entre 6.5 y 8.5: rango recomendado."
+                                                ),
+
+                                                html.Li(
+                                                    "pH > 8.5: agua alcalina."
+                                                ),
+
+                                            ]
+
+                                        ),
+
+                                    ]
+
+                                ),
+
+                            ],
+
+                            style=CARD_STYLE,
+
+                        ),
+
+                        md=6,
+
+                    ),
+                                        dbc.Col(
+
+                        dbc.Card(
+
+                            [
+
+                                dbc.CardHeader(
+
+                                    html.H5(
+                                        "🏢 Impacto Empresarial",
+                                        className="fw-bold mb-0",
+                                    )
+
+                                ),
+
+                                dbc.CardBody(
+
+                                    [
+
+                                        html.P(
+                                            "El uso de modelos predictivos permite anticipar cambios "
+                                            "en la calidad del agua, facilitando la toma de decisiones "
+                                            "y reduciendo tiempos de respuesta."
+                                        ),
+
+                                        dbc.ListGroup(
+
+                                            [
+
+                                                dbc.ListGroupItem(
+                                                    "🚰 Empresas de acueducto: monitoreo continuo de la calidad del agua."
+                                                ),
+
+                                                dbc.ListGroupItem(
+                                                    "🏭 Industria: prevención de corrosión e incrustaciones."
+                                                ),
+
+                                                dbc.ListGroupItem(
+                                                    "🌱 Gestión ambiental: seguimiento de cuerpos de agua."
+                                                ),
+
+                                                dbc.ListGroupItem(
+                                                    "🐟 Acuicultura: mantenimiento de condiciones óptimas."
+                                                ),
+
+                                                dbc.ListGroupItem(
+                                                    "🧪 Laboratorios: apoyo al control de calidad."
+                                                ),
+
+                                            ],
+
+                                            flush=True,
+
+                                        ),
+
+                                    ]
+
+                                ),
+
+                            ],
+
+                            style=CARD_STYLE,
+
+                        ),
+
+                        md=6,
+
+                    ),
+
+                ],
+
+                className="mb-4 g-3",
+
+            ),
+
+            dbc.Row(
+
+                dbc.Col(
+
+                    dbc.Card(
+
+                        [
+
+                            dbc.CardHeader(
+
+                                html.H5(
+                                    "⚙️ Metodología del Proyecto",
+                                    className="fw-bold mb-0",
+                                )
+
+                            ),
+
+                            dbc.CardBody(
+
+                                [
+
+                                    html.P(
+                                        "Para desarrollar el modelo predictivo se siguió una metodología "
+                                        "de Ciencia de Datos que permitió transformar los datos en un "
+                                        "modelo de clasificación confiable."
+                                    ),
+
+                                    html.Br(),
+
+                                    dbc.Row(
+
+                                        [
+
+                                            dbc.Col(
+
+                                                [
+
+                                                    html.H2("📊"),
+
+                                                    html.H5("1. Preparación"),
+
+                                                    html.P(
+                                                        "Revisión del conjunto de datos, tratamiento de valores "
+                                                        "faltantes y análisis de las variables."
+                                                    ),
+
+                                                ],
+
+                                                md=4,
+
+                                            ),
+
+                                            dbc.Col(
+
+                                                [
+
+                                                    html.H2("📈"),
+
+                                                    html.H5("2. Análisis Exploratorio"),
+
+                                                    html.P(
+                                                        "Se exploraron distribuciones, correlaciones y "
+                                                        "estadísticos descriptivos."
+                                                    ),
+
+                                                ],
+
+                                                md=4,
+
+                                            ),
+
+                                            dbc.Col(
+
+                                                [
+
+                                                    html.H2("⚖️"),
+
+                                                    html.H5("3. Balanceo (SMOTE)"),
+
+                                                    html.P(
+                                                        "Se aplicó SMOTE para equilibrar las clases de la "
+                                                        "variable objetivo antes del entrenamiento."
+                                                    ),
+
+                                                ],
+
+                                                md=4,
+
+                                            ),
+
+                                        ],
+
+                                        className="mb-4",
+
+                                    ),
+
+                                    dbc.Row(
+
+                                        [
+
+                                            dbc.Col(
+
+                                                [
+
+                                                    html.H2("🧠"),
+
+                                                    html.H5("4. Entrenamiento"),
+
+                                                    html.P(
+                                                        "Se entrenó un modelo de Regresión Logística "
+                                                        "utilizando el conjunto de entrenamiento balanceado."
+                                                    ),
+
+                                                ],
+
+                                                md=6,
+
+                                            ),
+
+                                            dbc.Col(
+
+                                                [
+
+                                                    html.H2("📉"),
+
+                                                    html.H5("5. Evaluación"),
+
+                                                    html.P(
+                                                        "El modelo fue evaluado mediante Accuracy, Precision, "
+                                                        "Recall, F1-Score, Curva ROC y Matriz de Confusión."
+                                                    ),
+
+                                                ],
+
+                                                md=6,
+
+                                            ),
+
+                                        ]
+
+                                    ),
+
+                                ]
+
+                            ),
+
+                        ],
+
+                        style=CARD_STYLE,
+
+                    )
+
+                ),
+
+                className="mb-4",
+
+            ),
+                        dbc.Row(
+
+                dbc.Col(
+
+                    dbc.Card(
+
+                        [
+
+                            dbc.CardHeader(
+
+                                html.H5(
+                                    "📋 Variables del Dataset",
+                                    className="fw-bold mb-0",
+                                )
+
+                            ),
+
+                            dbc.CardBody(
+
+                                dbc.Table(
+
+                                    [
+
+                                        html.Thead(
+
+                                            html.Tr(
+
+                                                [
+
+                                                    html.Th("Variable"),
+                                                    html.Th("Unidad"),
+                                                    html.Th("Rango"),
+                                                    html.Th("Rol"),
+
+                                                ]
+
+                                            )
+
+                                        ),
+
+                                        html.Tbody(
+
+                                            [
+
+                                                html.Tr(
+
+                                                    [
+
+                                                        html.Td("Temperatura"),
+                                                        html.Td("°C"),
+                                                        html.Td("15 - 35"),
+                                                        html.Td("Predictora"),
+
+                                                    ]
+
+                                                ),
+
+                                                html.Tr(
+
+                                                    [
+
+                                                        html.Td("Turbidez"),
+                                                        html.Td("NTU"),
+                                                        html.Td("0.5 - 10"),
+                                                        html.Td("Predictora"),
+
+                                                    ]
+
+                                                ),
+
+                                                html.Tr(
+
+                                                    [
+
+                                                        html.Td("Oxígeno Disuelto"),
+                                                        html.Td("mg/L"),
+                                                        html.Td("5 - 12"),
+                                                        html.Td("Predictora"),
+
+                                                    ]
+
+                                                ),
+
+                                                html.Tr(
+
+                                                    [
+
+                                                        html.Td("Conductividad"),
+                                                        html.Td("µS/cm"),
+                                                        html.Td("200 - 600"),
+                                                        html.Td("Predictora"),
+
+                                                    ]
+
+                                                ),
+
+                                                html.Tr(
+
+                                                    [
+
+                                                        html.Td("Categoría de pH"),
+                                                        html.Td("-"),
+                                                        html.Td("Ácido / Neutro-Alcalino"),
+                                                        html.Td("Variable objetivo"),
+
+                                                    ]
+
+                                                ),
+
+                                            ]
+
+                                        ),
+
+                                    ],
+
+                                    bordered=True,
+                                    striped=True,
+                                    hover=True,
+                                    responsive=True,
+                                    className="mb-0",
+
+                                )
+
+                            ),
+
+                        ],
+
+                        style=CARD_STYLE,
+
+                    )
+
+                )
+
+            ),
+
+        ],
+
+        style={"padding": "24px"},
+
+    )

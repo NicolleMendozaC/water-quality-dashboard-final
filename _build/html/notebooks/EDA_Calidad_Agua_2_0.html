@@ -2184,103 +2184,400 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
 <p>Este enfoque convierte el modelo en una herramienta aplicable en contextos prácticos de monitoreo ambiental.</p>
 </section>
 </section>
-<section id="modelo-de-machine-learning">
-<h2>7. Modelo de Machine Learning<a class="headerlink" href="#modelo-de-machine-learning" title="Link to this heading">#</a></h2>
-<p>En este proyecto se implementa un enfoque de aprendizaje supervisado para resolver un problema de clasificación binaria, donde el objetivo es determinar la calidad del agua a partir de variables fisicoquímicas.</p>
-<section id="formulacion-del-problema">
-<h3>7.1. Formulación del problema<a class="headerlink" href="#formulacion-del-problema" title="Link to this heading">#</a></h3>
-<p>El problema se define como una tarea de clasificación binaria, donde la variable objetivo representa dos posibles estados:</p>
-<ul class="simple">
-<li><p>0 → Agua Ácida (pH &lt; 7)</p></li>
-<li><p>1 → Agua Neutra/Alcalina (pH ≥ 7)</p></li>
-</ul>
-<p>El objetivo del modelo es aprender una función que relacione las variables de entrada con la clase correspondiente.</p>
-</section>
-<section id="seleccion-del-algoritmo">
-<h3>7.2. Selección del algoritmo<a class="headerlink" href="#seleccion-del-algoritmo" title="Link to this heading">#</a></h3>
-<p>Se selecciona el modelo de <strong>Regresión Logística</strong>, el cual es ampliamente utilizado en problemas de clasificación debido a su simplicidad, interpretabilidad y eficiencia computacional.</p>
-<p>Este modelo estima la probabilidad de pertenencia a una clase mediante una función sigmoide, lo que permite obtener resultados probabilísticos además de predicciones categóricas.</p>
-</section>
-<section id="representacion-matematica">
-<h3>7.3. Representación matemática<a class="headerlink" href="#representacion-matematica" title="Link to this heading">#</a></h3>
-<p>El modelo se basa en la siguiente función:</p>
-<p>P(y=1|X) = 1 / (1 + e^-(β₀ + β₁x₁ + β₂x₂ + … + βₙxₙ))</p>
-<p>Donde:</p>
-<ul class="simple">
-<li><p>X representa el conjunto de variables independientes (pH, temperatura, turbidez, etc.)</p></li>
-<li><p>β representa los coeficientes aprendidos por el modelo</p></li>
-<li><p>La salida corresponde a la probabilidad de pertenecer a la clase positiva</p></li>
-</ul>
-</section>
-<section id="id3">
-<h3>7.4. Preprocesamiento de datos<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
-<p>Antes del entrenamiento, los datos son normalizados utilizando StandardScaler, lo cual garantiza que todas las variables contribuyan de manera equilibrada al modelo.</p>
-<p>Posteriormente, el dataset es dividido en conjuntos de entrenamiento y prueba, asegurando una evaluación imparcial del rendimiento.</p>
-</section>
-<section id="id4">
-<h3>7.5. Entrenamiento del modelo<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
-<p>El modelo es entrenado utilizando el conjunto de datos de entrenamiento, ajustando los parámetros internos mediante optimización numérica.</p>
-<p>Durante este proceso, el algoritmo busca maximizar la probabilidad de asignar correctamente las clases observadas en los datos históricos.</p>
-</section>
-<section id="interpretabilidad-del-modelo">
-<h3>7.6. Interpretabilidad del modelo<a class="headerlink" href="#interpretabilidad-del-modelo" title="Link to this heading">#</a></h3>
-<p>Una de las principales ventajas de la Regresión Logística es su alta interpretabilidad, ya que permite analizar el impacto de cada variable sobre la predicción final a través de sus coeficientes.</p>
-<p>Esto es especialmente relevante en problemas ambientales, donde es importante comprender las variables que influyen en la calidad del agua.</p>
-</section>
-<section id="salida-del-modelo">
-<h3>7.7. Salida del modelo<a class="headerlink" href="#salida-del-modelo" title="Link to this heading">#</a></h3>
-<p>El modelo no solo genera una predicción de clase, sino también una probabilidad asociada, lo que permite interpretar el nivel de confianza en cada decisión.</p>
-<p>Esta característica es fundamental para aplicaciones prácticas donde se requiere evaluar el riesgo o incertidumbre del resultado.</p>
-</section>
-<section id="conclusion-del-modelo">
-<h3>7.8. Conclusión del modelo<a class="headerlink" href="#conclusion-del-modelo" title="Link to this heading">#</a></h3>
-<p>El modelo de Regresión Logística implementado demuestra ser una solución adecuada para este problema de clasificación, ofreciendo un equilibrio entre rendimiento, interpretabilidad y simplicidad.</p>
-<p>Su capacidad de generalización, junto con su facilidad de interpretación, lo convierten en una herramienta efectiva para problemas de análisis de calidad del agua basados en datos fisicoquímicos.</p>
+<section id="definicion-de-la-variable-respuesta">
+<h2>7. Definición de la Variable Respuesta<a class="headerlink" href="#definicion-de-la-variable-respuesta" title="Link to this heading">#</a></h2>
+<p>El objetivo del modelo es predecir la categoría del pH del agua a partir de variables fisicoquímicas medidas durante el monitoreo. Para ello, el valor continuo del pH fue transformado en una variable categórica binaria denominada pH_categoria.</p>
+<p>Se definieron dos clases:</p>
+<p>0: Agua con pH ácido (pH &lt; 7.0).
+1: Agua con pH neutro o básico (pH ≥ 7.0).</p>
+<p>Esta transformación permite abordar el problema como una tarea de clasificación binaria mediante algoritmos de aprendizaje supervisado.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ⚠️ Ajusta esta columna según tu dataset</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Crear la variable respuesta</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">7.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">df</span><span class="p">[[</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-438e7fda-08d6-4616-bcc0-d394cfa1c4bf" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pH</th>
+      <th>pH_categoria</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7.2500</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>7.1100</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7.0300</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7.3800</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7.4500</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-438e7fda-08d6-4616-bcc0-d394cfa1c4bf')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-438e7fda-08d6-4616-bcc0-d394cfa1c4bf button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-438e7fda-08d6-4616-bcc0-d394cfa1c4bf');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+<section id="distribucion-de-la-variable-respuesta">
+<h3>7.1 Distribución de la Variable Respuesta<a class="headerlink" href="#distribucion-de-la-variable-respuesta" title="Link to this heading">#</a></h3>
+<p>Una vez definida la variable respuesta, se analizó la distribución de las observaciones entre ambas categorías. Este análisis permite conocer si las clases se encuentran equilibradas antes del entrenamiento del modelo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">conteo</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+<span class="n">etiquetas</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span><span class="s2">&quot;Ácido (&lt;7.0)&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span><span class="s2">&quot;Neutro / Básico (≥7.0)&quot;</span>
+<span class="p">}</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">etiquetas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">conteo</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>
+    <span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;#FF9800&quot;</span><span class="p">,</span><span class="s2">&quot;#4CAF50&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span><span class="n">conteo</span><span class="o">.</span><span class="n">values</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">bar</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">+</span><span class="mi">3</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="se">\n</span><span class="s2">(</span><span class="si">{</span><span class="n">val</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%)&quot;</span><span class="p">,</span>
+        <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span>
+    <span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribución de la variable respuesta&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Número de muestras&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">conteo</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e76060024b9733c1af3dc0c949f85ed25b968e6685469cad06d8e81065c2cdff.png" src="../_images/e76060024b9733c1af3dc0c949f85ed25b968e6685469cad06d8e81065c2cdff.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pH_categoria
+0     10
+1    490
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="analisis-del-desbalance-de-clases">
+<h3>7.2 Análisis del Desbalance de Clases<a class="headerlink" href="#analisis-del-desbalance-de-clases" title="Link to this heading">#</a></h3>
+<p>La distribución de la variable respuesta evidencia un fuerte desbalance entre las categorías. La mayor parte de las observaciones pertenecen a la clase Neutro/Básico, mientras que únicamente una pequeña proporción corresponde a la clase Ácido.</p>
+<p>Este tipo de desbalance puede afectar el desempeño del modelo, ya que el algoritmo tiende a favorecer la clase mayoritaria, obteniendo una alta exactitud (accuracy) pero una baja capacidad para identificar correctamente la clase minoritaria.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conteo</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+
+<span class="n">porcentaje</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">conteo</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">porcentaje</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pH_categoria
+1    490
+0     10
+Name: count, dtype: int64
+
+pH_categoria
+1   98.0000
+0    2.0000
+Name: proportion, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="balanceo-de-las-clases">
+<h3>7.3 Balanceo de las Clases<a class="headerlink" href="#balanceo-de-las-clases" title="Link to this heading">#</a></h3>
+<p>Con el propósito de reducir el efecto del desbalance de clases, se aplicó la técnica RandomOverSampler, la cual incrementa de forma aleatoria el número de observaciones de la clase minoritaria hasta igualar el tamaño de la clase mayoritaria.</p>
+<p>Esta estrategia permite entrenar un modelo más equilibrado y mejorar la capacidad predictiva sobre ambas categorías.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.over_sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomOverSampler</span>
+
+<span class="c1"># Excluir &#39;pH&#39; (ya que &#39;pH_categoria&#39; es la variable respuesta) y &#39;Sample ID&#39; (identificador)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">,</span> <span class="s2">&quot;Sample ID&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span>
+
+<span class="n">ros</span> <span class="o">=</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">X_res</span><span class="p">,</span><span class="n">y_res</span> <span class="o">=</span> <span class="n">ros</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">y_res</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pH_categoria
+1    490
+0     10
+Name: count, dtype: int64
+
+pH_categoria
+1    490
+0    490
+Name: count, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span><span class="s2">&quot;green&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Antes del balanceo&quot;</span><span class="p">)</span>
+
+<span class="n">y_res</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span><span class="s2">&quot;green&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Después del balanceo&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0c779b25a841337342b3fed3025a636c270bb89df6b74203eb36e684bb1a5e8b.png" src="../_images/0c779b25a841337342b3fed3025a636c270bb89df6b74203eb36e684bb1a5e8b.png" />
+</div>
+</div>
+</section>
+<section id="division-del-conjunto-de-datos">
+<h3>7.4 División del Conjunto de Datos<a class="headerlink" href="#division-del-conjunto-de-datos" title="Link to this heading">#</a></h3>
+<p>Posteriormente, el conjunto de datos balanceado fue dividido en datos de entrenamiento y prueba. Se utilizó un 75% de las observaciones para entrenar el modelo y el 25% restante para evaluar su desempeño sobre datos no utilizados durante el entrenamiento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 
-<span class="c1"># División train/test</span>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X_res</span><span class="p">,</span>
+    <span class="n">y_res</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">y_res</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="modelo-de-machine-learning">
+<h2>8. Modelo de Machine Learning<a class="headerlink" href="#modelo-de-machine-learning" title="Link to this heading">#</a></h2>
+<p>En esta sección se desarrolla un modelo de Regresión Logística para predecir la categoría del pH del agua (Ácido o Neutro/Básico) a partir de variables fisicoquímicas. Antes del entrenamiento se analiza el desbalance de clases y se aplica una técnica de balanceo para evitar que el modelo favorezca la clase mayoritaria.</p>
+<section id="variables-predictoras-y-variable-respuesta">
+<h3>8.0.1 Variables predictoras y variable respuesta<a class="headerlink" href="#variables-predictoras-y-variable-respuesta" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables predictoras:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Variable respuesta:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variables predictoras:
+Index([&#39;Sample ID&#39;, &#39;Temperature (°C)&#39;, &#39;Turbidity (NTU)&#39;,
+       &#39;Dissolved Oxygen (mg/L)&#39;, &#39;Conductivity (µS/cm)&#39;],
+      dtype=&#39;object&#39;)
+
+Variable respuesta:
+pH_categoria
+</pre></div>
+</div>
+</div>
+</div>
+<p>Las variables predictoras corresponden a las propiedades fisicoquímicas del agua, mientras que la variable respuesta es la categoría del pH.</p>
+</section>
+<section id="escalamiento">
+<h3>8.0.2 Escalamiento<a class="headerlink" href="#escalamiento" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
 
-<span class="c1"># Escalado de datos</span>
 <span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+
 <span class="n">X_train</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
 <span class="n">X_test</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+<section id="modelo-1-regresion-logistica">
+<h3>8.1. Modelo 1: Regresión Logística<a class="headerlink" href="#modelo-1-regresion-logistica" title="Link to this heading">#</a></h3>
+<section id="entrenamiento">
+<h4>8.1.1. Entrenamiento<a class="headerlink" href="#entrenamiento" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
 
-<span class="c1"># Modelo</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
 <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><style>#sk-container-id-3 {
+<div class="output text_html"><style>#sk-container-id-5 {
   /* Definition of color scheme common for light and dark mode */
   --sklearn-color-text: #000;
   --sklearn-color-text-muted: #666;
@@ -2311,15 +2608,15 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
   }
 }
 
-#sk-container-id-3 {
+#sk-container-id-5 {
   color: var(--sklearn-color-text);
 }
 
-#sk-container-id-3 pre {
+#sk-container-id-5 pre {
   padding: 0;
 }
 
-#sk-container-id-3 input.sk-hidden--visually {
+#sk-container-id-5 input.sk-hidden--visually {
   border: 0;
   clip: rect(1px 1px 1px 1px);
   clip: rect(1px, 1px, 1px, 1px);
@@ -2331,7 +2628,7 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
   width: 1px;
 }
 
-#sk-container-id-3 div.sk-dashed-wrapped {
+#sk-container-id-5 div.sk-dashed-wrapped {
   border: 1px dashed var(--sklearn-color-line);
   margin: 0 0.4em 0.5em 0.4em;
   box-sizing: border-box;
@@ -2339,7 +2636,7 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
   background-color: var(--sklearn-color-background);
 }
 
-#sk-container-id-3 div.sk-container {
+#sk-container-id-5 div.sk-container {
   /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
      but bootstrap.min.css set `[hidden] { display: none !important; }`
      so we also need the `!important` here to be able to override the
@@ -2349,7 +2646,7 @@ Passing `palette` without assigning `hue` is deprecated and will be removed in v
   position: relative;
 }
 
-#sk-container-id-3 div.sk-text-repr-fallback {
+#sk-container-id-5 div.sk-text-repr-fallback {
   display: none;
 }
 
@@ -2365,14 +2662,14 @@ div.sk-item {
 
 /* Parallel-specific style estimator block */
 
-#sk-container-id-3 div.sk-parallel-item::after {
+#sk-container-id-5 div.sk-parallel-item::after {
   content: "";
   width: 100%;
   border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
   flex-grow: 1;
 }
 
-#sk-container-id-3 div.sk-parallel {
+#sk-container-id-5 div.sk-parallel {
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -2380,28 +2677,28 @@ div.sk-item {
   position: relative;
 }
 
-#sk-container-id-3 div.sk-parallel-item {
+#sk-container-id-5 div.sk-parallel-item {
   display: flex;
   flex-direction: column;
 }
 
-#sk-container-id-3 div.sk-parallel-item:first-child::after {
+#sk-container-id-5 div.sk-parallel-item:first-child::after {
   align-self: flex-end;
   width: 50%;
 }
 
-#sk-container-id-3 div.sk-parallel-item:last-child::after {
+#sk-container-id-5 div.sk-parallel-item:last-child::after {
   align-self: flex-start;
   width: 50%;
 }
 
-#sk-container-id-3 div.sk-parallel-item:only-child::after {
+#sk-container-id-5 div.sk-parallel-item:only-child::after {
   width: 0;
 }
 
 /* Serial-specific style estimator block */
 
-#sk-container-id-3 div.sk-serial {
+#sk-container-id-5 div.sk-serial {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2419,14 +2716,14 @@ clickable and can be expanded/collapsed.
 
 /* Pipeline and ColumnTransformer style (default) */
 
-#sk-container-id-3 div.sk-toggleable {
+#sk-container-id-5 div.sk-toggleable {
   /* Default theme specific background. It is overwritten whether we have a
   specific estimator or a Pipeline/ColumnTransformer */
   background-color: var(--sklearn-color-background);
 }
 
 /* Toggleable label */
-#sk-container-id-3 label.sk-toggleable__label {
+#sk-container-id-5 label.sk-toggleable__label {
   cursor: pointer;
   display: flex;
   width: 100%;
@@ -2439,13 +2736,13 @@ clickable and can be expanded/collapsed.
   gap: 0.5em;
 }
 
-#sk-container-id-3 label.sk-toggleable__label .caption {
+#sk-container-id-5 label.sk-toggleable__label .caption {
   font-size: 0.6rem;
   font-weight: lighter;
   color: var(--sklearn-color-text-muted);
 }
 
-#sk-container-id-3 label.sk-toggleable__label-arrow:before {
+#sk-container-id-5 label.sk-toggleable__label-arrow:before {
   /* Arrow on the left of the label */
   content: "▸";
   float: left;
@@ -2453,13 +2750,13 @@ clickable and can be expanded/collapsed.
   color: var(--sklearn-color-icon);
 }
 
-#sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {
+#sk-container-id-5 label.sk-toggleable__label-arrow:hover:before {
   color: var(--sklearn-color-text);
 }
 
 /* Toggleable content - dropdown */
 
-#sk-container-id-3 div.sk-toggleable__content {
+#sk-container-id-5 div.sk-toggleable__content {
   max-height: 0;
   max-width: 0;
   overflow: hidden;
@@ -2468,12 +2765,12 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content.fitted {
+#sk-container-id-5 div.sk-toggleable__content.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content pre {
+#sk-container-id-5 div.sk-toggleable__content pre {
   margin: 0.2em;
   border-radius: 0.25em;
   color: var(--sklearn-color-text);
@@ -2481,79 +2778,79 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-toggleable__content.fitted pre {
+#sk-container-id-5 div.sk-toggleable__content.fitted pre {
   /* unfitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
-#sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+#sk-container-id-5 input.sk-toggleable__control:checked~div.sk-toggleable__content {
   /* Expand drop-down */
   max-height: 200px;
   max-width: 100%;
   overflow: auto;
 }
 
-#sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+#sk-container-id-5 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
   content: "▾";
 }
 
 /* Pipeline/ColumnTransformer-specific style */
 
-#sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator-specific style */
 
 /* Colorize estimator box */
-#sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+#sk-container-id-5 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
-#sk-container-id-3 div.sk-label label.sk-toggleable__label,
-#sk-container-id-3 div.sk-label label {
+#sk-container-id-5 div.sk-label label.sk-toggleable__label,
+#sk-container-id-5 div.sk-label label {
   /* The background is the default theme color */
   color: var(--sklearn-color-text-on-default-background);
 }
 
 /* On hover, darken the color of the background */
-#sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {
+#sk-container-id-5 div.sk-label:hover label.sk-toggleable__label {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
 /* Label box, darken color on hover, fitted */
-#sk-container-id-3 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+#sk-container-id-5 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
   color: var(--sklearn-color-text);
   background-color: var(--sklearn-color-fitted-level-2);
 }
 
 /* Estimator label */
 
-#sk-container-id-3 div.sk-label label {
+#sk-container-id-5 div.sk-label label {
   font-family: monospace;
   font-weight: bold;
   display: inline-block;
   line-height: 1.2em;
 }
 
-#sk-container-id-3 div.sk-label-container {
+#sk-container-id-5 div.sk-label-container {
   text-align: center;
 }
 
 /* Estimator-specific */
-#sk-container-id-3 div.sk-estimator {
+#sk-container-id-5 div.sk-estimator {
   font-family: monospace;
   border: 1px dotted var(--sklearn-color-border-box);
   border-radius: 0.25em;
@@ -2563,18 +2860,18 @@ clickable and can be expanded/collapsed.
   background-color: var(--sklearn-color-unfitted-level-0);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted {
+#sk-container-id-5 div.sk-estimator.fitted {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-0);
 }
 
 /* on hover */
-#sk-container-id-3 div.sk-estimator:hover {
+#sk-container-id-5 div.sk-estimator:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-2);
 }
 
-#sk-container-id-3 div.sk-estimator.fitted:hover {
+#sk-container-id-5 div.sk-estimator.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-2);
 }
@@ -2662,7 +2959,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 
 /* "?"-specific style due to the `<a>` HTML tag */
 
-#sk-container-id-3 a.estimator_doc_link {
+#sk-container-id-5 a.estimator_doc_link {
   float: right;
   font-size: 1rem;
   line-height: 1em;
@@ -2677,191 +2974,618 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   border: var(--sklearn-color-unfitted-level-1) 1pt solid;
 }
 
-#sk-container-id-3 a.estimator_doc_link.fitted {
+#sk-container-id-5 a.estimator_doc_link.fitted {
   /* fitted */
   border: var(--sklearn-color-fitted-level-1) 1pt solid;
   color: var(--sklearn-color-fitted-level-1);
 }
 
 /* On hover */
-#sk-container-id-3 a.estimator_doc_link:hover {
+#sk-container-id-5 a.estimator_doc_link:hover {
   /* unfitted */
   background-color: var(--sklearn-color-unfitted-level-3);
   color: var(--sklearn-color-background);
   text-decoration: none;
 }
 
-#sk-container-id-3 a.estimator_doc_link.fitted:hover {
+#sk-container-id-5 a.estimator_doc_link.fitted:hover {
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(max_iter=500)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" checked><label for="sk-estimator-id-3" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>LogisticRegression</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(max_iter=500)</pre></div> </div></div></div></div></div></div>
+</style><div id="sk-container-id-5" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(max_iter=500)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" checked><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>LogisticRegression</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(max_iter=500)</pre></div> </div></div></div></div></div></div>
 </div>
 </section>
-</section>
 <section id="evaluacion-del-modelo">
-<h2>8. Evaluacion del Modelo<a class="headerlink" href="#evaluacion-del-modelo" title="Link to this heading">#</a></h2>
+<h4>8.1.2. Evaluacion del Modelo<a class="headerlink" href="#evaluacion-del-modelo" title="Link to this heading">#</a></h4>
 <p>La evaluación del modelo es una etapa crítica dentro del flujo de Machine Learning, ya que permite determinar su capacidad de generalización sobre datos no vistos.</p>
 <p>En este proyecto se utilizan múltiples métricas complementarias con el fin de obtener una visión integral del rendimiento del modelo.</p>
-<section id="accuracy-exactitud-global">
-<h3>8.1. Accuracy (Exactitud global)<a class="headerlink" href="#accuracy-exactitud-global" title="Link to this heading">#</a></h3>
-<p>La accuracy representa el porcentaje total de predicciones correctas realizadas por el modelo. Aunque es una métrica intuitiva, puede resultar insuficiente por sí sola en casos de desbalanceo de clases, por lo que se complementa con otras métricas.</p>
-</section>
-<section id="precision">
-<h3>8.2. Precision<a class="headerlink" href="#precision" title="Link to this heading">#</a></h3>
-<p>La precision mide la proporción de verdaderos positivos entre todas las predicciones positivas realizadas por el modelo. Esta métrica es clave cuando se desea minimizar falsos positivos.</p>
-<p>En el contexto de la calidad del agua, una alta precision garantiza que las muestras clasificadas como “Neutras/Alcalinas” realmente lo sean.</p>
-</section>
-<section id="recall-sensibilidad">
-<h3>8.3. Recall (Sensibilidad)<a class="headerlink" href="#recall-sensibilidad" title="Link to this heading">#</a></h3>
-<p>El recall mide la capacidad del modelo para identificar correctamente todos los casos positivos reales. Es especialmente importante cuando es crítico no omitir casos relevantes.</p>
-<p>En este problema, un alto recall asegura que la mayoría de muestras realmente Neutras/Alcalinas sean detectadas correctamente.</p>
-</section>
-<section id="f1-score">
-<h3>8.4. F1-Score<a class="headerlink" href="#f1-score" title="Link to this heading">#</a></h3>
-<p>El F1-score representa el equilibrio entre precision y recall, proporcionando una métrica robusta cuando se busca balance entre falsos positivos y falsos negativos.</p>
-<p>Es especialmente útil cuando existe compromiso entre ambas métricas.</p>
-</section>
-<section id="curva-roc-y-auc">
-<h3>8.5. Curva ROC y AUC<a class="headerlink" href="#curva-roc-y-auc" title="Link to this heading">#</a></h3>
-<p>La curva ROC permite analizar la capacidad del modelo para distinguir entre clases a diferentes umbrales de decisión.</p>
-<p>El área bajo la curva (AUC) proporciona una medida global de separabilidad. Un valor cercano a 1 indica un excelente poder discriminativo del modelo.</p>
-</section>
-<section id="matriz-de-confusion">
-<h3>8.6. Matriz de Confusión<a class="headerlink" href="#matriz-de-confusion" title="Link to this heading">#</a></h3>
-<p>La matriz de confusión permite analizar de forma detallada los aciertos y errores del modelo, descomponiendo las predicciones en verdaderos positivos, verdaderos negativos, falsos positivos y falsos negativos.</p>
-<p>Esta representación es fundamental para entender el comportamiento real del modelo más allá de las métricas agregadas.</p>
-</section>
-<section id="interpretacion-general">
-<h3>8.7. Interpretación general<a class="headerlink" href="#interpretacion-general" title="Link to this heading">#</a></h3>
-<p>En conjunto, las métricas obtenidas indican que el modelo presenta un desempeño sólido y equilibrado, con buena capacidad de generalización y adecuada separación entre clases.</p>
-<p>El uso combinado de estas métricas permite validar que el modelo no solo es preciso, sino también confiable desde una perspectiva de toma de decisiones.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-<span class="n">y_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">y_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 </section>
-</section>
 <section id="metricas-principales">
-<h2>9. Métricas principales<a class="headerlink" href="#metricas-principales" title="Link to this heading">#</a></h2>
+<h4>8.1.3. Métricas principales<a class="headerlink" href="#metricas-principales" title="Link to this heading">#</a></h4>
 <p>Estas métricas permiten evaluar qué tan bien funciona el modelo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">precision_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">recall_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">f1_score</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Precision:&quot;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recall:&quot;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1-score:&quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">average</span><span class="o">=</span><span class="s1">&#39;weighted&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy :&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Precision:&quot;</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Recall   :&quot;</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1 Score :&quot;</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy: 0.984
-Precision: 0.968256
-Recall: 0.984
-F1-score: 0.9760645161290323
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.12/dist-packages/sklearn/metrics/_classification.py:1565: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, f&quot;{metric.capitalize()} is&quot;, len(result))
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy : 0.9346938775510204
+Precision: 0.9274193548387096
+Recall   : 0.9426229508196722
+F1 Score : 0.9349593495934959
 </pre></div>
 </div>
 </div>
 </div>
-<section id="id5">
-<h3>9.1 Matriz de confusión<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+</section>
+<section id="matriz-de-confusion">
+<h4>8.1.4. Matriz de confusión<a class="headerlink" href="#matriz-de-confusion" title="Link to this heading">#</a></h4>
 <p>Muestra los aciertos y errores del modelo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
 <span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
 
-<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Matriz de Confusión&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">cm</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;d&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">,</span>
+    <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Ácido&quot;</span><span class="p">,</span><span class="s2">&quot;Neutro/Básico&quot;</span><span class="p">],</span>
+    <span class="n">yticklabels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Ácido&quot;</span><span class="p">,</span><span class="s2">&quot;Neutro/Básico&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Predicción&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Real&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Matriz de Confusión&quot;</span><span class="p">)</span>
+
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/15cc5fbe43dc78ba2f4ca6f21ed5051537a5fd4ebbae82af3e1c893370d70645.png" src="../_images/15cc5fbe43dc78ba2f4ca6f21ed5051537a5fd4ebbae82af3e1c893370d70645.png" />
+<img alt="../_images/216f97b17ffa5a960ee2c251d34a1a0391f81d2a4d6779b24366390d342eb28d.png" src="../_images/216f97b17ffa5a960ee2c251d34a1a0391f81d2a4d6779b24366390d342eb28d.png" />
 </div>
 </div>
 </section>
 <section id="curva-roc">
-<h3>9.2. Curva ROC<a class="headerlink" href="#curva-roc" title="Link to this heading">#</a></h3>
+<h4>8.1.5. Curva ROC<a class="headerlink" href="#curva-roc" title="Link to this heading">#</a></h4>
 <p>Evalúa la capacidad del modelo para separar correctamente las clases.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[1 0]
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">roc_auc_score</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_curve</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">roc_auc_score</span>
 
-<span class="c1"># Probabilidad de la clase positiva</span>
-<span class="n">y_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
-
-<span class="c1"># Especificar cuál es la clase positiva</span>
-<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span>
     <span class="n">y_test</span><span class="p">,</span>
     <span class="n">y_prob</span><span class="p">,</span>
-    <span class="n">pos_label</span><span class="o">=</span><span class="s2">&quot;Neutro / Básico (≥ 7.0)&quot;</span>
+    <span class="n">pos_label</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">)</span>
 
-<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span>
-    <span class="n">y_test</span><span class="p">,</span>
-    <span class="n">y_prob</span>
-<span class="p">)</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;AUC = </span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;k--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span><span class="n">tpr</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;AUC=</span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="s2">&quot;k--&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;False Positive Rate&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;True Positive Rate&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Curva ROC&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.12/dist-packages/sklearn/metrics/_ranking.py:1188: UndefinedMetricWarning: No positive samples in y_true, true positive value should be meaningless
-  warnings.warn(
+<img alt="../_images/169bafcacde5acc42d8037476d5eadec47426569c198f4aadb0f578c72d4caad.png" src="../_images/169bafcacde5acc42d8037476d5eadec47426569c198f4aadb0f578c72d4caad.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="modelo-2-random-forest">
+<h3>8.2. Modelo 2: Random Forest<a class="headerlink" href="#modelo-2-random-forest" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># Entrenamiento del modelo</span>
+<span class="n">model_rf</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">model_rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predicciones</span>
+<span class="n">y_pred_rf</span> <span class="o">=</span> <span class="n">model_rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Evaluación</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_rf</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matriz de confusión:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_rf</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reporte de clasificación:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_rf</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../_images/d48beb24d928f55983e5afb2f3e90f0ca41d33844592df22255909d93ded842b.png" src="../_images/d48beb24d928f55983e5afb2f3e90f0ca41d33844592df22255909d93ded842b.png" />
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy: 1.0
+
+Matriz de confusión:
+ [[123   0]
+ [  0 122]]
+
+Reporte de clasificación:
+               precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00       123
+           1       1.00      1.00      1.00       122
+
+    accuracy                           1.00       245
+   macro avg       1.00      1.00      1.00       245
+weighted avg       1.00      1.00      1.00       245
+</pre></div>
+</div>
 </div>
 </div>
 </section>
+<section id="modelo-3-arbol-de-decision">
+<h3>8.3. Modelo 3: Árbol de Decisión<a class="headerlink" href="#modelo-3-arbol-de-decision" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># Entrenamiento</span>
+<span class="n">model_dt</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">model_dt</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predicción</span>
+<span class="n">y_pred_dt</span> <span class="o">=</span> <span class="n">model_dt</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Evaluación</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_dt</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matriz de confusión:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_dt</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reporte:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_dt</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy: 0.9959183673469387
+
+Matriz de confusión:
+ [[123   0]
+ [  1 121]]
+
+Reporte:
+               precision    recall  f1-score   support
+
+           0       0.99      1.00      1.00       123
+           1       1.00      0.99      1.00       122
+
+    accuracy                           1.00       245
+   macro avg       1.00      1.00      1.00       245
+weighted avg       1.00      1.00      1.00       245
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="modelo-4-support-vector-machine-svm">
+<h3>8.4. Modelo 4: Support Vector Machine (SVM)<a class="headerlink" href="#modelo-4-support-vector-machine-svm" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># Entrenamiento</span>
+<span class="n">model_svm</span> <span class="o">=</span> <span class="n">SVC</span><span class="p">()</span>
+<span class="n">model_svm</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predicción</span>
+<span class="n">y_pred_svm</span> <span class="o">=</span> <span class="n">model_svm</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Evaluación</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_svm</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matriz de confusión:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_svm</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reporte:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_svm</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy: 0.9959183673469387
+
+Matriz de confusión:
+ [[123   0]
+ [  1 121]]
+
+Reporte:
+               precision    recall  f1-score   support
+
+           0       0.99      1.00      1.00       123
+           1       1.00      0.99      1.00       122
+
+    accuracy                           1.00       245
+   macro avg       1.00      1.00      1.00       245
+weighted avg       1.00      1.00      1.00       245
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="modelo-5-k-nearest-neighbors-knn">
+<h3>8.5. Modelo 5: K-Nearest Neighbors (KNN)<a class="headerlink" href="#modelo-5-k-nearest-neighbors-knn" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
+
+<span class="c1"># Entrenamiento</span>
+<span class="n">model_knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">model_knn</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predicción</span>
+<span class="n">y_pred_knn</span> <span class="o">=</span> <span class="n">model_knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="c1"># Evaluación</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Accuracy:&quot;</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_knn</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Matriz de confusión:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_knn</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reporte:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_knn</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Accuracy: 0.9959183673469387
+
+Matriz de confusión:
+ [[123   0]
+ [  1 121]]
+
+Reporte:
+               precision    recall  f1-score   support
+
+           0       0.99      1.00      1.00       123
+           1       1.00      0.99      1.00       122
+
+    accuracy                           1.00       245
+   macro avg       1.00      1.00      1.00       245
+weighted avg       1.00      1.00      1.00       245
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="comparacion-con-otros-modelos">
+<h2>11. Comparación con otros modelos<a class="headerlink" href="#comparacion-con-otros-modelos" title="Link to this heading">#</a></h2>
+<p>Con el fin de verificar si la Regresión Logística era realmente la mejor alternativa para este problema de clasificación, se entrenaron y evaluaron otros algoritmos de Machine Learning utilizando exactamente el mismo conjunto de entrenamiento y prueba.</p>
+<p>Todos los modelos fueron entrenados sobre los datos previamente balanceados mediante la técnica SMOTE y normalizados utilizando StandardScaler cuando fue necesario.</p>
+<p>Los modelos evaluados fueron:</p>
+<ul class="simple">
+<li><p>Regresión Logística</p></li>
+<li><p>Árbol de Decisión</p></li>
+<li><p>Random Forest</p></li>
+<li><p>Support Vector Machine (SVM)</p></li>
+<li><p>K-Nearest Neighbors (KNN)</p></li>
+</ul>
+<p>Posteriormente se compararon las principales métricas de desempeño para seleccionar el modelo más adecuado.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SVC</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">precision_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">recall_score</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">f1_score</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Regresión Logística&quot;</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span>
+    <span class="s2">&quot;Árbol de Decisión&quot;</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+    <span class="s2">&quot;Random Forest&quot;</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+    <span class="s2">&quot;SVM&quot;</span><span class="p">:</span> <span class="n">SVC</span><span class="p">(</span><span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
+    <span class="s2">&quot;KNN&quot;</span><span class="p">:</span> <span class="n">KNeighborsClassifier</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="n">resultados</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">modelos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="n">modelo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">modelo</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+    <span class="n">resultados</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;Modelo&quot;</span><span class="p">:</span> <span class="n">nombre</span><span class="p">,</span>
+        <span class="s2">&quot;Accuracy&quot;</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+        <span class="s2">&quot;Precision&quot;</span><span class="p">:</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+        <span class="s2">&quot;Recall&quot;</span><span class="p">:</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+        <span class="s2">&quot;F1-Score&quot;</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+    <span class="p">})</span>
+
+<span class="n">resultados</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">resultados</span><span class="p">)</span>
+
+<span class="n">resultados</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-155ba082-9872-4771-8497-01ed83d514fd" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Modelo</th>
+      <th>Accuracy</th>
+      <th>Precision</th>
+      <th>Recall</th>
+      <th>F1-Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Regresión Logística</td>
+      <td>0.9347</td>
+      <td>0.9274</td>
+      <td>0.9426</td>
+      <td>0.9350</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Árbol de Decisión</td>
+      <td>0.9959</td>
+      <td>1.0000</td>
+      <td>0.9918</td>
+      <td>0.9959</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Random Forest</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+      <td>1.0000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>SVM</td>
+      <td>0.9959</td>
+      <td>1.0000</td>
+      <td>0.9918</td>
+      <td>0.9959</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>KNN</td>
+      <td>0.9959</td>
+      <td>1.0000</td>
+      <td>0.9918</td>
+      <td>0.9959</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-155ba082-9872-4771-8497-01ed83d514fd')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-155ba082-9872-4771-8497-01ed83d514fd button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-155ba082-9872-4771-8497-01ed83d514fd');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+  <div id="id_58e2175b-a9f7-4621-a17c-d1e972af383e">
+    <style>
+      .colab-df-generate {
+        background-color: #E8F0FE;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        fill: #1967D2;
+        height: 32px;
+        padding: 0 0 0 0;
+        width: 32px;
+      }
+
+      .colab-df-generate:hover {
+        background-color: #E2EBFA;
+        box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+        fill: #174EA6;
+      }
+
+      [theme=dark] .colab-df-generate {
+        background-color: #3B4455;
+        fill: #D2E3FC;
+      }
+
+      [theme=dark] .colab-df-generate:hover {
+        background-color: #434B5C;
+        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+        filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+        fill: #FFFFFF;
+      }
+    </style>
+    <button class="colab-df-generate" onclick="generateWithVariable('resultados')"
+            title="Generate code using this dataframe."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M7,19H8.4L18.45,9,17,7.55,7,17.6ZM5,21V16.75L18.45,3.32a2,2,0,0,1,2.83,0l1.4,1.43a1.91,1.91,0,0,1,.58,1.4,1.91,1.91,0,0,1-.58,1.4L9.25,21ZM18.45,9,17,7.55Zm-12,3A5.31,5.31,0,0,0,4.9,8.1,5.31,5.31,0,0,0,1,6.5,5.31,5.31,0,0,0,4.9,4.9,5.31,5.31,0,0,0,6.5,1,5.31,5.31,0,0,0,8.1,4.9,5.31,5.31,0,0,0,12,6.5,5.46,5.46,0,0,0,6.5,12Z"/>
+  </svg>
+    </button>
+    <script>
+      (() => {
+      const buttonEl =
+        document.querySelector('#id_58e2175b-a9f7-4621-a17c-d1e972af383e button.colab-df-generate');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      buttonEl.onclick = () => {
+        google.colab.notebook.generateWithVariable('resultados');
+      }
+      })();
+    </script>
+  </div>
+
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">resultados</span><span class="p">[</span><span class="s2">&quot;Modelo&quot;</span><span class="p">],</span> <span class="n">resultados</span><span class="p">[</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Comparación del Accuracy entre modelos&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/17f78698bfa3525e495b25f71f2e76498498f24c9ea26881ba2cf721de45b1e9.png" src="../_images/17f78698bfa3525e495b25f71f2e76498498f24c9ea26881ba2cf721de45b1e9.png" />
+</div>
+</div>
+</section>
+<section id="seleccion-del-modelo-final">
+<h2>11.1. Selección del modelo final<a class="headerlink" href="#seleccion-del-modelo-final" title="Link to this heading">#</a></h2>
+<p>Después de comparar diferentes algoritmos de clasificación, se observó que el modelo Random Forest obtuvo el mejor desempeño global, alcanzando los valores más altos en todas las métricas evaluadas (accuracy, precision, recall y F1-score).</p>
+<p>Sin embargo, la Regresión Logística fue seleccionada como modelo final del proyecto debido a su alta interpretabilidad y capacidad para explicar la relación entre las variables fisicoquímicas y la clasificación del pH.</p>
+<p>Este aspecto es especialmente importante en contextos ambientales, donde no solo se busca una predicción precisa, sino también comprender el comportamiento de las variables involucradas.</p>
+<p>Por esta razón, se priorizó un modelo más interpretable para su implementación en el dashboard interactivo desarrollado con Dash, permitiendo una mejor comprensión de los resultados por parte del usuario final.</p>
 </section>
 <section id="prediccion-de-nuevas-muestras">
-<h2>10. Predicción de nuevas muestras<a class="headerlink" href="#prediccion-de-nuevas-muestras" title="Link to this heading">#</a></h2>
+<h2>12. Predicción de nuevas muestras<a class="headerlink" href="#prediccion-de-nuevas-muestras" title="Link to this heading">#</a></h2>
 <p>Se utiliza el modelo entrenado para predecir la calidad del agua con nuevos datos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nueva_muestra</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">7.2</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mi">350</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># La nueva muestra debe contener solo las variables predictoras (Temperatura, Turbidez, Oxígeno Disuelto, Conductividad)</span>
+<span class="n">nueva_muestra</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">25</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mi">350</span><span class="p">]]</span>
 
 <span class="n">nueva_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">nueva_muestra</span><span class="p">)</span>
 
@@ -2874,8 +3598,8 @@ F1-score: 0.9760645161290323
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predicción: 1
-Probabilidad: [0.3004066 0.6995934]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Predicción: 0
+Probabilidad: [0.74987552 0.25012448]
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.12/dist-packages/sklearn/utils/validation.py:2739: UserWarning: X does not have valid feature names, but StandardScaler was fitted with feature names
@@ -2891,40 +3615,22 @@ Probabilidad: [0.3004066 0.6995934]
 <p>Este proyecto abordó el desarrollo de un sistema de Machine Learning orientado a la clasificación de la calidad del agua a partir de variables fisicoquímicas, integrando todo el ciclo de vida de un modelo de ciencia de datos: exploración, preprocesamiento, modelado, evaluación y predicción.</p>
 <section id="hallazgos-del-analisis-exploratorio-eda">
 <h2>Hallazgos del Análisis Exploratorio (EDA)<a class="headerlink" href="#hallazgos-del-analisis-exploratorio-eda" title="Link to this heading">#</a></h2>
-<p>Durante la etapa de análisis exploratorio se identificó que las variables fisicoquímicas presentan comportamientos relativamente estables dentro del conjunto de datos, sin valores extremos significativos que comprometieran la calidad del modelado.</p>
-<p>Se observó que variables como el pH y la turbidez tienen una influencia relevante en la diferenciación de las clases objetivo (Ácido vs Neutro/Alcalino), lo que sugiere una relación potencialmente lineal en el espacio de características. Asimismo, se evidenció una correlación moderada entre algunas variables, lo que justificó el uso de un modelo lineal como primera aproximación.</p>
+<p>El dataset de calidad del agua presenta una estructura limpia y confiable: 500 registros sin valores nulos ni duplicados, con todas las variables dentro de rangos fisicoquímicamente esperados. La variable objetivo pH mostró una distribución prácticamente simétrica (media = mediana = 7.16, asimetría = 0.09) y de forma ligeramente platicúrtica, con el 100% de las muestras dentro del rango recomendado por la OMS (6.5–8.5), lo que refleja un conjunto de datos de agua controlada y de calidad aceptable.
+En cuanto a las relaciones entre variables, el Oxígeno Disuelto y la Conductividad presentaron las correlaciones más fuertes con el pH (r ≈ 0.70 y r ≈ 0.66, respectivamente), consolidándose como los predictores más informativos. La Temperatura mostró una asociación positiva débil (r ≈ 0.15), mientras que la Turbidez registró la correlación más baja y de signo negativo (r ≈ −0.09), indicando escasa relación lineal con el pH en este conjunto de datos.aproximación.</p>
 </section>
 <section id="hallazgos-del-modelado">
 <h2>Hallazgos del Modelado<a class="headerlink" href="#hallazgos-del-modelado" title="Link to this heading">#</a></h2>
-<p>El modelo de Regresión Logística demostró ser una elección adecuada para este problema de clasificación binaria. Su comportamiento estable y su capacidad de interpretación permitieron obtener resultados consistentes sin necesidad de recurrir a modelos más complejos.</p>
-<p>El proceso de escalado de variables contribuyó significativamente a la estabilidad del entrenamiento, asegurando que todas las características aportaran de manera equilibrada al modelo.</p>
+<p>A partir del pH continuo se construyó una variable de clasificación binaria (pH_categoria): Ácido (pH &lt; 7.0) y Neutro/Básico (pH ≥ 7.0). Dado el desbalance inicial entre clases, se aplicó RandomOverSampler para equilibrar la distribución antes del entrenamiento, garantizando que el modelo no favoreciera artificialmente la clase mayoritaria.
+Se entrenó un modelo de Regresión Logística con estandarización previa mediante StandardScaler, elección justificada por la estructura aproximadamente lineal de los datos y por la necesidad de interpretabilidad en un contexto ambiental. El modelo fue evaluado sobre un conjunto de prueba independiente (25% de los datos balanceados).todas las características aportaran de manera equilibrada al modelo.</p>
 </section>
 <section id="hallazgos-de-evaluacion">
 <h2>Hallazgos de Evaluación<a class="headerlink" href="#hallazgos-de-evaluacion" title="Link to this heading">#</a></h2>
-<p>Las métricas de evaluación evidenciaron un rendimiento sólido del modelo en el conjunto de prueba:</p>
-<ul class="simple">
-<li><p>La <strong>accuracy</strong> reflejó un alto porcentaje de clasificación correcta en términos generales.</p></li>
-<li><p>La <strong>precision</strong> indicó una baja tasa de falsos positivos en la clase positiva.</p></li>
-<li><p>El <strong>recall</strong> mostró una adecuada capacidad del modelo para identificar correctamente los casos positivos.</p></li>
-<li><p>El <strong>F1-score</strong> confirmó un balance adecuado entre precision y recall, lo cual es fundamental en problemas de clasificación binaria.</p></li>
-<li><p>La <strong>curva ROC</strong> evidenció una buena capacidad discriminativa del modelo, con un AUC cercano a valores óptimos, lo que indica una separación efectiva entre clases.</p></li>
-</ul>
-<p>Adicionalmente, la matriz de confusión permitió identificar que los errores de clasificación fueron limitados y no presentaron un sesgo significativo hacia alguna de las clases.</p>
-</section>
-<section id="id6">
-<h2>Interpretación General<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
-<p>Desde una perspectiva de ciencia de datos, el modelo desarrollado cumple con los criterios de interpretabilidad, eficiencia y desempeño. Su estructura simple permite comprender fácilmente la influencia de cada variable en la predicción final, lo cual es especialmente valioso en contextos ambientales donde la explicabilidad es prioritaria.</p>
-<p>Este enfoque demuestra que, incluso con modelos lineales, es posible alcanzar resultados robustos cuando los datos presentan una estructura bien definida y cuando el proceso de preparación es adecuado.</p>
-</section>
-<section id="aplicabilidad-del-modelo">
-<h2>Aplicabilidad del Modelo<a class="headerlink" href="#aplicabilidad-del-modelo" title="Link to this heading">#</a></h2>
-<p>El sistema desarrollado tiene potencial de aplicación en escenarios reales de monitoreo de calidad del agua, donde podría integrarse como una herramienta de apoyo para la toma de decisiones en entornos ambientales, sanitarios o industriales.</p>
-<p>La capacidad del modelo de realizar predicciones en tiempo real a partir de variables fisicoquímicas lo convierte en una solución útil para sistemas de alerta temprana o análisis automatizado de muestras.</p>
+<p>Las métricas obtenidas evidenciaron un desempeño sólido y equilibrado del modelo. La accuracy, precision, recall y F1-score mostraron valores consistentes entre sí, sin sesgos marcados hacia ninguna de las dos clases. La curva ROC confirmó una buena capacidad discriminativa del modelo, con un AUC que indica separación efectiva entre agua ácida y agua neutra/básica. La matriz de confusión reflejó que los errores de clasificación fueron limitados y distribuidos de forma equilibrada.</p>
 </section>
 <section id="conclusion-final">
 <h2>Conclusión Final<a class="headerlink" href="#conclusion-final" title="Link to this heading">#</a></h2>
-<p>En conclusión, este proyecto demuestra la efectividad de un pipeline completo de Machine Learning aplicado a un problema ambiental real. Se valida que el uso de técnicas de análisis de datos y modelos de clasificación permite transformar datos fisicoquímicos en información útil para la toma de decisiones.</p>
-<p>El trabajo realizado no solo evidencia la aplicabilidad de la Regresión Logística en problemas de clasificación binaria, sino que también resalta la importancia de un proceso estructurado de ciencia de datos que garantice resultados interpretables, reproducibles y útiles en contextos del mundo real.</p>
+<p>Este proyecto demuestra que es posible construir un pipeline completo y reproducible de ciencia de datos aplicado a un problema ambiental real, desde la exploración y limpieza de datos hasta la predicción sobre nuevas muestras. Los resultados confirman que el Oxígeno Disuelto y la Conductividad son las variables con mayor capacidad predictiva sobre la categoría del pH, mientras que la Turbidez aporta poca información en este contexto.
+La Regresión Logística resultó ser un modelo adecuado para este problema: eficiente, interpretable y con buen desempeño sin necesidad de recurrir a algoritmos más complejos. Este tipo de solución tiene potencial de aplicación real en sistemas de monitoreo de calidad del agua, donde la explicabilidad del modelo es tan importante como su precisión.</p>
 </section>
 </section>
 
@@ -3029,41 +3735,39 @@ Probabilidad: [0.3004066 0.6995934]
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-y-prediccion">6.7. Interpretabilidad y predicción</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-de-machine-learning">7. Modelo de Machine Learning</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formulacion-del-problema">7.1. Formulación del problema</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-algoritmo">7.2. Selección del algoritmo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#representacion-matematica">7.3. Representación matemática</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">7.4. Preprocesamiento de datos</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">7.5. Entrenamiento del modelo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretabilidad-del-modelo">7.6. Interpretabilidad del modelo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#salida-del-modelo">7.7. Salida del modelo</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-modelo">7.8. Conclusión del modelo</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definicion-de-la-variable-respuesta">7. Definición de la Variable Respuesta</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-de-la-variable-respuesta">7.1 Distribución de la Variable Respuesta</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-desbalance-de-clases">7.2 Análisis del Desbalance de Clases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#balanceo-de-las-clases">7.3 Balanceo de las Clases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#division-del-conjunto-de-datos">7.4 División del Conjunto de Datos</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo">8. Evaluacion del Modelo</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-exactitud-global">8.1. Accuracy (Exactitud global)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precision">8.2. Precision</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recall-sensibilidad">8.3. Recall (Sensibilidad)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#f1-score">8.4. F1-Score</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc-y-auc">8.5. Curva ROC y AUC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">8.6. Matriz de Confusión</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-general">8.7. Interpretación general</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-de-machine-learning">8. Modelo de Machine Learning</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-predictoras-y-variable-respuesta">8.0.1 Variables predictoras y variable respuesta</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalamiento">8.0.2 Escalamiento</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-1-regresion-logistica">8.1. Modelo 1: Regresión Logística</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento">8.1.1. Entrenamiento</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo">8.1.2. Evaluacion del Modelo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-principales">8.1.3. Métricas principales</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">8.1.4. Matriz de confusión</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc">8.1.5. Curva ROC</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-principales">9. Métricas principales</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">9.1 Matriz de confusión</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc">9.2. Curva ROC</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-2-random-forest">8.2. Modelo 2: Random Forest</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-3-arbol-de-decision">8.3. Modelo 3: Árbol de Decisión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-4-support-vector-machine-svm">8.4. Modelo 4: Support Vector Machine (SVM)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-5-k-nearest-neighbors-knn">8.5. Modelo 5: K-Nearest Neighbors (KNN)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-de-nuevas-muestras">10. Predicción de nuevas muestras</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparacion-con-otros-modelos">11. Comparación con otros modelos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-del-modelo-final">11.1. Selección del modelo final</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-de-nuevas-muestras">12. Predicción de nuevas muestras</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-y-hallazgos">Conclusiones y Hallazgos</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-del-analisis-exploratorio-eda">Hallazgos del Análisis Exploratorio (EDA)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-del-modelado">Hallazgos del Modelado</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hallazgos-de-evaluacion">Hallazgos de Evaluación</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Interpretación General</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aplicabilidad-del-modelo">Aplicabilidad del Modelo</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-final">Conclusión Final</a></li>
 </ul>
 </li>

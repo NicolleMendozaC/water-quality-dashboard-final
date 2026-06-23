@@ -17,8 +17,15 @@ PASTEL = ["#AED9E0", "#FFB7B2", "#B5EAD7", "#FFDAC1", "#C7CEEA"]
 
 def _pipeline_diagram() -> go.Figure:
     """Diagrama de flujo del pipeline de ML."""
-    steps  = ["Datos CSV", "Limpieza", "Train/Test Split",
-              "StandardScaler", "Regresión Logística", "Evaluación"]
+    steps = [
+    "Datos CSV",
+    "Limpieza",
+    "Balanceo\n(SMOTE)",
+    "Train/Test",
+    "StandardScaler",
+    "Regresión\nLogística",
+    "Evaluación"
+]
     x_pos  = list(range(len(steps)))
     colors = PASTEL * 2
 
@@ -36,7 +43,7 @@ def _pipeline_diagram() -> go.Figure:
                                arrowhead=2, arrowsize=1.5,
                                arrowcolor="#555")
         fig.add_annotation(x=i, y=0, text=f"<b>{step}</b>",
-                           showarrow=False, font=dict(size=11))
+                           showarrow=False, font=dict(size=10))
 
     fig.update_layout(
         xaxis=dict(visible=False, range=[-0.6, len(steps) - 0.4]),
@@ -44,7 +51,7 @@ def _pipeline_diagram() -> go.Figure:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor ="rgba(0,0,0,0)",
         margin=dict(t=10, b=10, l=10, r=10),
-        height=130,
+        height=160,
     )
     return fig
 
@@ -71,7 +78,15 @@ def layout() -> html.Div:
                     dbc.Row([
                         dbc.Col([
                             html.P([html.Strong("Fuente: "), "Dataset real de calidad del agua."]),
-                            html.P([html.Strong("Registros: "), "500 muestras."]),
+                            html.P([
+    html.Strong("Registros originales: "),
+    "500 muestras."
+]),
+
+html.P([
+    html.Strong("Preprocesamiento: "),
+    "Se realizó limpieza de datos, tratamiento de valores faltantes y balanceo de clases mediante la técnica SMOTE antes del entrenamiento del modelo."
+]),
                             html.P([html.Strong("Variables: "), "5 fisicoquímicas + 1 objetivo (pH)."]),
                             html.P([html.Strong("Variable respuesta: "),
                                     "pH categorizado como ",
@@ -113,8 +128,10 @@ def layout() -> html.Div:
                 dbc.CardHeader(html.H5("🧠 Regresión Logística",
                                        className="mb-0 fw-bold")),
                 dbc.CardBody([
-                    html.P("Algoritmo de clasificación binaria que estima la "
-                           "probabilidad de pertenencia a cada clase."),
+                    html.P(
+    "Se entrenó un modelo de Regresión Logística utilizando un conjunto de datos balanceado mediante SMOTE. "
+    "El objetivo fue clasificar las muestras de agua como Ácidas o Neutro/Alcalinas reduciendo el sesgo provocado por el desbalance de clases."
+),
                     html.H6("Función Sigmoide:", className="fw-bold mt-3"),
                     html.Div([
                         html.Code("P(y=1|X) = 1 / (1 + e^(-z))",
@@ -128,12 +145,21 @@ def layout() -> html.Div:
                     ]),
                     html.H6("Configuración:", className="fw-bold mt-3"),
                     dbc.ListGroup([
-                        dbc.ListGroupItem("Solver: lbfgs"),
-                        dbc.ListGroupItem("Max iteraciones: 500"),
-                        dbc.ListGroupItem("Normalización: StandardScaler"),
-                        dbc.ListGroupItem("Split: 75% train / 25% test"),
-                        dbc.ListGroupItem("Stratify: Sí (clases balanceadas)"),
-                    ], flush=True),
+    dbc.ListGroupItem("Balanceo de clases: SMOTE"),
+    dbc.ListGroupItem("Normalización: StandardScaler"),
+    dbc.ListGroupItem("Modelo: Regresión Logística"),
+    dbc.ListGroupItem("Solver: lbfgs"),
+    dbc.ListGroupItem("Máximo de iteraciones: 500"),
+    dbc.ListGroupItem("División entrenamiento/prueba: 75% / 25%"),
+], flush=True),
+html.H6("¿Por qué aplicar SMOTE?", className="fw-bold mt-4"),
+
+html.P(
+    "Inicialmente la variable objetivo presentaba un desbalance entre las clases. "
+    "Para evitar que el modelo favoreciera la clase mayoritaria se aplicó la técnica "
+    "SMOTE (Synthetic Minority Over-sampling Technique), generando nuevas muestras "
+    "sintéticas de la clase minoritaria antes del entrenamiento."
+),
                 ])
             ], style=CARD_STYLE), md=6),
 

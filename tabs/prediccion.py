@@ -60,7 +60,17 @@ def layout() -> html.Div:
                    "de la categoría de pH en tiempo real.", className="text-muted"),
             html.Hr(),
         ]), className="mb-4"),
-
+dbc.Alert(
+    [
+        html.H5("🤖 Predicción mediante Machine Learning", className="alert-heading"),
+        html.P(
+            "Esta herramienta utiliza un modelo de Regresión Logística entrenado con un conjunto de datos balanceado mediante SMOTE. "
+            "Ingrese los valores de la muestra para estimar su categoría de pH."
+        ),
+    ],
+    color="info",
+    className="mb-4",
+),
         # ── Alerta si no hay modelo ───────────────────────────────────────────
         dbc.Alert(
             "⚠️  Modelo no entrenado. Ejecuta: python model/train_model.py",
@@ -107,7 +117,30 @@ def layout() -> html.Div:
                               style={"height": "220px"})
                 ), style={**CARD_STYLE, "marginTop": "16px"}),
             ], md=7),
+            dbc.Card(
+    dbc.CardBody([
+        html.H5("📖 Interpretación", className="fw-bold"),
+        html.P(
+            "El modelo estima la probabilidad de que la muestra pertenezca a la categoría "
+            "Neutro/Alcalino a partir de las variables fisicoquímicas ingresadas."
+        ),
+        html.Ul([
+            html.Li("Probabilidades cercanas al 100% indican mayor confianza del modelo."),
+            html.Li("Valores cercanos al 50% representan mayor incertidumbre."),
+            html.Li("La predicción es un apoyo al análisis y no reemplaza mediciones de laboratorio."),
+        ]),
+    ]),
+    style=CARD_STYLE,
+    className="mt-3",
+),
+
+dbc.Alert(
+    "ℹ️ Los resultados corresponden a una predicción generada por un modelo de Machine Learning y deben interpretarse como apoyo a la toma de decisiones.",
+    color="secondary",
+    className="mt-3",
+),
         ], className="g-3"),
+
 
         # ── Valores de sliders (sincronizar labels) ───────────────────────────
         html.Div(id="hidden-sync", style={"display": "none"}),
