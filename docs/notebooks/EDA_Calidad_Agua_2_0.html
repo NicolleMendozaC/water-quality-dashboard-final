@@ -2993,42 +2993,42 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </style><div id="sk-container-id-5" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>LogisticRegression(max_iter=500)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" checked><label for="sk-estimator-id-5" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>LogisticRegression</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.linear_model.LogisticRegression.html">?<span>Documentation for LogisticRegression</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>LogisticRegression(max_iter=500)</pre></div> </div></div></div></div></div></div>
 </div>
 </section>
-</section>
 <section id="evaluacion-del-modelo">
-<h2>8. Evaluacion del Modelo<a class="headerlink" href="#evaluacion-del-modelo" title="Link to this heading">#</a></h2>
+<h3>9. Evaluacion del Modelo<a class="headerlink" href="#evaluacion-del-modelo" title="Link to this heading">#</a></h3>
 <p>La evaluación del modelo es una etapa crítica dentro del flujo de Machine Learning, ya que permite determinar su capacidad de generalización sobre datos no vistos.</p>
 <p>En este proyecto se utilizan múltiples métricas complementarias con el fin de obtener una visión integral del rendimiento del modelo.</p>
+</section>
 <section id="accuracy-exactitud-global">
-<h3>8.1. Accuracy (Exactitud global)<a class="headerlink" href="#accuracy-exactitud-global" title="Link to this heading">#</a></h3>
+<h3>9.1. Accuracy (Exactitud global)<a class="headerlink" href="#accuracy-exactitud-global" title="Link to this heading">#</a></h3>
 <p>La accuracy representa el porcentaje total de predicciones correctas realizadas por el modelo. Aunque es una métrica intuitiva, puede resultar insuficiente por sí sola en casos de desbalanceo de clases, por lo que se complementa con otras métricas.</p>
 </section>
 <section id="precision">
-<h3>8.2. Precision<a class="headerlink" href="#precision" title="Link to this heading">#</a></h3>
+<h3>9.2. Precision<a class="headerlink" href="#precision" title="Link to this heading">#</a></h3>
 <p>La precision mide la proporción de verdaderos positivos entre todas las predicciones positivas realizadas por el modelo. Esta métrica es clave cuando se desea minimizar falsos positivos.</p>
 <p>En el contexto de la calidad del agua, una alta precision garantiza que las muestras clasificadas como “Neutras/Alcalinas” realmente lo sean.</p>
 </section>
 <section id="recall-sensibilidad">
-<h3>8.3. Recall (Sensibilidad)<a class="headerlink" href="#recall-sensibilidad" title="Link to this heading">#</a></h3>
+<h3>9.3. Recall (Sensibilidad)<a class="headerlink" href="#recall-sensibilidad" title="Link to this heading">#</a></h3>
 <p>El recall mide la capacidad del modelo para identificar correctamente todos los casos positivos reales. Es especialmente importante cuando es crítico no omitir casos relevantes.</p>
 <p>En este problema, un alto recall asegura que la mayoría de muestras realmente Neutras/Alcalinas sean detectadas correctamente.</p>
 </section>
 <section id="f1-score">
-<h3>8.4. F1-Score<a class="headerlink" href="#f1-score" title="Link to this heading">#</a></h3>
+<h3>9.4. F1-Score<a class="headerlink" href="#f1-score" title="Link to this heading">#</a></h3>
 <p>El F1-score representa el equilibrio entre precision y recall, proporcionando una métrica robusta cuando se busca balance entre falsos positivos y falsos negativos.</p>
 <p>Es especialmente útil cuando existe compromiso entre ambas métricas.</p>
 </section>
 <section id="curva-roc-y-auc">
-<h3>8.5. Curva ROC y AUC<a class="headerlink" href="#curva-roc-y-auc" title="Link to this heading">#</a></h3>
+<h3>9.5. Curva ROC y AUC<a class="headerlink" href="#curva-roc-y-auc" title="Link to this heading">#</a></h3>
 <p>La curva ROC permite analizar la capacidad del modelo para distinguir entre clases a diferentes umbrales de decisión.</p>
 <p>El área bajo la curva (AUC) proporciona una medida global de separabilidad. Un valor cercano a 1 indica un excelente poder discriminativo del modelo.</p>
 </section>
 <section id="matriz-de-confusion">
-<h3>8.6. Matriz de Confusión<a class="headerlink" href="#matriz-de-confusion" title="Link to this heading">#</a></h3>
+<h3>9.6. Matriz de Confusión<a class="headerlink" href="#matriz-de-confusion" title="Link to this heading">#</a></h3>
 <p>La matriz de confusión permite analizar de forma detallada los aciertos y errores del modelo, descomponiendo las predicciones en verdaderos positivos, verdaderos negativos, falsos positivos y falsos negativos.</p>
 <p>Esta representación es fundamental para entender el comportamiento real del modelo más allá de las métricas agregadas.</p>
 </section>
 <section id="interpretacion-general">
-<h3>8.7. Interpretación general<a class="headerlink" href="#interpretacion-general" title="Link to this heading">#</a></h3>
+<h3>9.7. Interpretación general<a class="headerlink" href="#interpretacion-general" title="Link to this heading">#</a></h3>
 <p>En conjunto, las métricas obtenidas indican que el modelo presenta un desempeño sólido y equilibrado, con buena capacidad de generalización y adecuada separación entre clases.</p>
 <p>El uso combinado de estas métricas permite validar que el modelo no solo es preciso, sino también confiable desde una perspectiva de toma de decisiones.</p>
 <div class="cell docutils container">
@@ -3043,7 +3043,7 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
 </section>
 </section>
 <section id="metricas-principales">
-<h2>9. Métricas principales<a class="headerlink" href="#metricas-principales" title="Link to this heading">#</a></h2>
+<h2>10. Métricas principales<a class="headerlink" href="#metricas-principales" title="Link to this heading">#</a></h2>
 <p>Estas métricas permiten evaluar qué tan bien funciona el modelo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3069,7 +3069,7 @@ F1 Score : 0.9349593495934959
 </div>
 </div>
 <section id="id4">
-<h3>9.1 Matriz de confusión<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<h3>10.1 Matriz de confusión<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
 <p>Muestra los aciertos y errores del modelo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3103,7 +3103,7 @@ F1 Score : 0.9349593495934959
 </div>
 </section>
 <section id="curva-roc">
-<h3>9.2. Curva ROC<a class="headerlink" href="#curva-roc" title="Link to this heading">#</a></h3>
+<h3>10.2. Curva ROC<a class="headerlink" href="#curva-roc" title="Link to this heading">#</a></h3>
 <p>Evalúa la capacidad del modelo para separar correctamente las clases.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3140,7 +3140,7 @@ F1 Score : 0.9349593495934959
 </section>
 </section>
 <section id="prediccion-de-nuevas-muestras">
-<h2>10. Predicción de nuevas muestras<a class="headerlink" href="#prediccion-de-nuevas-muestras" title="Link to this heading">#</a></h2>
+<h2>11. Predicción de nuevas muestras<a class="headerlink" href="#prediccion-de-nuevas-muestras" title="Link to this heading">#</a></h2>
 <p>Se utiliza el modelo entrenado para predecir la calidad del agua con nuevos datos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3306,24 +3306,22 @@ La Regresión Logística resultó ser un modelo adecuado para este problema: efi
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-predictoras-y-variable-respuesta">8.1 Variables predictoras y variable respuesta</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#escalamiento">8.2 Escalamiento</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">8.3 Entrenamiento del modelo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo">9. Evaluacion del Modelo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-exactitud-global">9.1. Accuracy (Exactitud global)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precision">9.2. Precision</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recall-sensibilidad">9.3. Recall (Sensibilidad)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#f1-score">9.4. F1-Score</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc-y-auc">9.5. Curva ROC y AUC</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">9.6. Matriz de Confusión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-general">9.7. Interpretación general</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo">8. Evaluacion del Modelo</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-exactitud-global">8.1. Accuracy (Exactitud global)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precision">8.2. Precision</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recall-sensibilidad">8.3. Recall (Sensibilidad)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#f1-score">8.4. F1-Score</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc-y-auc">8.5. Curva ROC y AUC</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#matriz-de-confusion">8.6. Matriz de Confusión</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-general">8.7. Interpretación general</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-principales">10. Métricas principales</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">10.1 Matriz de confusión</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc">10.2. Curva ROC</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metricas-principales">9. Métricas principales</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">9.1 Matriz de confusión</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#curva-roc">9.2. Curva ROC</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-de-nuevas-muestras">10. Predicción de nuevas muestras</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-de-nuevas-muestras">11. Predicción de nuevas muestras</a></li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-y-hallazgos">Conclusiones y Hallazgos</a><ul class="visible nav section-nav flex-column">
