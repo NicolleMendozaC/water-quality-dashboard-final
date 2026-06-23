@@ -74,7 +74,6 @@ def layout() -> html.Div:
                 dbc.CardHeader(html.H5("⚙️ Parámetros de la Muestra",
                                        className="mb-0 fw-bold")),
                 dbc.CardBody([
-                    _slider("sl-ph",    "pH",                    6.5, 8.5, 0.01, 7.2,  PASTEL[0]),
                     _slider("sl-temp",  "Temperatura (°C)",      15,  35,  0.1,  25.0, PASTEL[2]),
                     _slider("sl-turb",  "Turbidez (NTU)",        0.5, 10,  0.1,  3.0,  PASTEL[3]),
                     _slider("sl-do",    "Oxígeno Disuelto (mg/L)", 5, 12,  0.1,  8.0,  PASTEL[4]),
@@ -122,7 +121,7 @@ def register_callbacks(app):
     """Registra los callbacks de la pestaña Predicción en la app Dash."""
 
     # Actualizar labels de sliders en tiempo real
-    for id_ in ["sl-ph", "sl-temp", "sl-turb", "sl-do", "sl-cond"]:
+    for id_ in ["sl-temp", "sl-turb", "sl-do", "sl-cond"]:
         @app.callback(
             Output(f"{id_}-val", "children"),
             Input(id_, "value"),
@@ -135,21 +134,20 @@ def register_callbacks(app):
         Output("pred-result", "children"),
         Output("pred-gauge",  "figure"),
         Input("btn-predict", "n_clicks"),
-        State("sl-ph",   "value"),
         State("sl-temp", "value"),
         State("sl-turb", "value"),
         State("sl-do",   "value"),
         State("sl-cond", "value"),
         prevent_initial_call=True,
     )
-    def predict(n_clicks, ph, temp, turb, do, cond):
+    def predict(n_clicks, temp, turb, do, cond):
         if not os.path.exists(MODEL_PATH):
             return no_update, no_update
 
         data    = joblib.load(MODEL_PATH)
         pipeline = data["pipeline"]
 
-        X       = np.array([[ph, temp, turb, do, cond]])
+        X       = np.array([[temp, turb, do, cond]])
         pred    = pipeline.predict(X)[0]
         proba   = pipeline.predict_proba(X)[0]
         prob_1  = proba[1]           # probabilidad Neutro/Alcalino
@@ -171,7 +169,6 @@ def register_callbacks(app):
                    className="mb-0"),
             html.Hr(),
             dbc.Row([
-                dbc.Col(html.Small([html.Strong("pH: "), str(ph)]),       md=4),
                 dbc.Col(html.Small([html.Strong("Temp: "), f"{temp} °C"]),md=4),
                 dbc.Col(html.Small([html.Strong("Turb: "), f"{turb} NTU"]),md=4),
             ]),
