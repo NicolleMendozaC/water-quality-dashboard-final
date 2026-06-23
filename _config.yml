@@ -5,7 +5,29 @@ copyright: "2026"
 execute:
   execute_notebooks: force
 
+# =========================
+# CONFIGURACIÓN VISUAL
+# =========================
 html:
   home_page_in_navbar: true
-  use_repository_button: false
+  use_repository_button: true
   use_issues_button: false
+  use_edit_page_button: false
+
+# =========================
+# TEMA (ESTO ES LO QUE TE FALTA)
+# =========================
+sphinx:
+  config:
+    html_theme: pydata_sphinx_theme
+
+# =========================
+# ESTILO TIPO PORTAFOLIO
+# =========================
+launch_buttons:
+  colab_url: ""
+
+repository:
+  url: https://github.com/NicolleMendozaC/water-quality-dashboard-final
+  path_to_book: ""
+  branch: main
