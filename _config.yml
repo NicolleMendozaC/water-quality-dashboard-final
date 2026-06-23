@@ -1,0 +1,11 @@
+title: "Predicción de la Calidad del Agua"
+author: "Grupo 4: Nicolle Mendoza, Carlos Díaz, Habib Hadechini y Jhonatan Blanco"
+copyright: "2026"
+
+execute:
+  execute_notebooks: force
+
+html:
+  home_page_in_navbar: true
+  use_repository_button: false
+  use_issues_button: false

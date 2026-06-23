@@ -1,0 +1,50 @@
+/* assets/custom.css — Estilos globales del dashboard */
+
+body {
+  font-family: 'Segoe UI', 'Inter', sans-serif;
+  background-color: #f0f4f7;
+}
+
+/* Transición suave entre pestañas */
+#tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Cards con hover */
+.card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Sliders con colores pastel */
+.rc-slider-track { background-color: #AED9E0 !important; }
+.rc-slider-handle { border-color: #AED9E0 !important; }
+
+/* Botón principal */
+.btn-primary {
+  background-color: #AED9E0 !important;
+  border-color: #AED9E0 !important;
+  color: #2c3e50 !important;
+  font-weight: 600;
+}
+.btn-primary:hover {
+  background-color: #89c8d4 !important;
+  border-color: #89c8d4 !important;
+}
+
+/* Tabs */
+.tab--selected {
+  border-top: 3px solid #AED9E0 !important;
+  font-weight: 700 !important;
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f0f4f7; }
+::-webkit-scrollbar-thumb { background: #AED9E0; border-radius: 3px; }

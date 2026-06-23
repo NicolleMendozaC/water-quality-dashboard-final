@@ -1,0 +1,5 @@
+format: jb-book
+root: intro
+
+chapters:
+  - file: notebooks/EDA_Calidad_Agua_2_0
