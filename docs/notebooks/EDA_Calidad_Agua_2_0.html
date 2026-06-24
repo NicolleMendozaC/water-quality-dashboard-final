@@ -2423,92 +2423,67 @@ Name: proportion, dtype: float64
 </div>
 </div>
 </section>
-<section id="balanceo-de-las-clases">
-<h3>7.3 Balanceo de las Clases<a class="headerlink" href="#balanceo-de-las-clases" title="Link to this heading">#</a></h3>
-<p>Con el propósito de reducir el efecto del desbalance de clases, se aplicó la técnica RandomOverSampler, la cual incrementa de forma aleatoria el número de observaciones de la clase minoritaria hasta igualar el tamaño de la clase mayoritaria.</p>
-<p>Esta estrategia permite entrenar un modelo más equilibrado y mejorar la capacidad predictiva sobre ambas categorías.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.over_sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomOverSampler</span>
-
-<span class="c1"># Excluir &#39;pH&#39; (ya que &#39;pH_categoria&#39; es la variable respuesta) y &#39;Sample ID&#39; (identificador)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">,</span> <span class="s2">&quot;Sample ID&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span>
-
-<span class="n">ros</span> <span class="o">=</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="n">X_res</span><span class="p">,</span><span class="n">y_res</span> <span class="o">=</span> <span class="n">ros</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">y_res</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pH_categoria
-1    490
-0     10
-Name: count, dtype: int64
-
-pH_categoria
-1    490
-0    490
-Name: count, dtype: int64
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
-
-<span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span><span class="s2">&quot;green&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Antes del balanceo&quot;</span><span class="p">)</span>
-
-<span class="n">y_res</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-    <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span><span class="s2">&quot;green&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-
-<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Después del balanceo&quot;</span><span class="p">)</span>
-
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/0c779b25a841337342b3fed3025a636c270bb89df6b74203eb36e684bb1a5e8b.png" src="../_images/0c779b25a841337342b3fed3025a636c270bb89df6b74203eb36e684bb1a5e8b.png" />
-</div>
-</div>
-</section>
-<section id="division-del-conjunto-de-datos">
-<h3>7.4 División del Conjunto de Datos<a class="headerlink" href="#division-del-conjunto-de-datos" title="Link to this heading">#</a></h3>
-<p>Posteriormente, el conjunto de datos balanceado fue dividido en datos de entrenamiento y prueba. Se utilizó un 75% de las observaciones para entrenar el modelo y el 25% restante para evaluar su desempeño sobre datos no utilizados durante el entrenamiento.</p>
+<section id="division-del-conjunto-de-datos-antes-de-balancear">
+<h3>7.3 División del Conjunto de Datos (antes de balancear)<a class="headerlink" href="#division-del-conjunto-de-datos-antes-de-balancear" title="Link to this heading">#</a></h3>
+<p>Antes de aplicar cualquier técnica de balanceo, se separan los datos en conjuntos de entrenamiento (75%) y prueba (25%) <strong>a partir de los datos originales, sin balancear</strong>. Esto es fundamental: si el balanceo se aplica antes de dividir, copias de las mismas muestras originales pueden terminar repartidas entre entrenamiento y prueba, y el modelo terminaría evaluándose con datos que ya “memorizó” — un problema conocido como <em>data leakage</em> (fuga de datos), que infla artificialmente las métricas.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
 
-<span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">X_res</span><span class="p">,</span>
-    <span class="n">y_res</span><span class="p">,</span>
+<span class="c1"># Excluir &#39;pH&#39; (es la base de la variable respuesta) y &#39;Sample ID&#39; (identificador, no es predictor)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">,</span> <span class="s2">&quot;Sample ID&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
     <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">stratify</span><span class="o">=</span><span class="n">y_res</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Distribución en entrenamiento (original, sin balancear):&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Distribución en prueba (se mantiene SIEMPRE sin balancear):&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="balanceo-de-las-clases-solo-en-el-conjunto-de-entrenamiento">
+<h3>7.4 Balanceo de las Clases (solo en el conjunto de entrenamiento)<a class="headerlink" href="#balanceo-de-las-clases-solo-en-el-conjunto-de-entrenamiento" title="Link to this heading">#</a></h3>
+<p>Con el propósito de reducir el efecto del desbalance de clases, se aplicó la técnica <code class="docutils literal notranslate"><span class="pre">RandomOverSampler</span></code>, la cual incrementa de forma aleatoria el número de observaciones de la clase minoritaria hasta igualar el tamaño de la clase mayoritaria. <strong>El balanceo se aplica únicamente sobre <code class="docutils literal notranslate"><span class="pre">X_train</span></code>/<code class="docutils literal notranslate"><span class="pre">y_train</span></code></strong>; el conjunto de prueba (<code class="docutils literal notranslate"><span class="pre">X_test</span></code>/<code class="docutils literal notranslate"><span class="pre">y_test</span></code>) no se toca, para que la evaluación final refleje datos nunca vistos y con la distribución real del problema.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.over_sampling</span><span class="w"> </span><span class="kn">import</span> <span class="n">RandomOverSampler</span>
+
+<span class="n">ros</span> <span class="o">=</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">ros</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Entrenamiento ANTES de balancear -&gt; después de balancear:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Prueba (sin tocar):&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">y</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribución original (dataset completo)&#39;</span><span class="p">)</span>
+
+<span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Entrenamiento después del balanceo&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -2522,25 +2497,13 @@ Name: count, dtype: int64
 <h3>8.0.1 Variables predictoras y variable respuesta<a class="headerlink" href="#variables-predictoras-y-variable-respuesta" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;pH&quot;</span><span class="p">,</span> <span class="s2">&quot;pH_categoria&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;pH_categoria&quot;</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables predictoras:&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Nota: X y y ya quedaron definidos correctamente en la sección 7.3</span>
+<span class="c1"># (sin &#39;Sample ID&#39;, que es solo un identificador y no una variable predictora)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Variables predictoras:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Variable respuesta:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Variable respuesta:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variables predictoras:
-Index([&#39;Sample ID&#39;, &#39;Temperature (°C)&#39;, &#39;Turbidity (NTU)&#39;,
-       &#39;Dissolved Oxygen (mg/L)&#39;, &#39;Conductivity (µS/cm)&#39;],
-      dtype=&#39;object&#39;)
-
-Variable respuesta:
-pH_categoria
 </pre></div>
 </div>
 </div>
@@ -3279,7 +3242,7 @@ weighted avg       1.00      1.00      1.00       245
 <section id="comparacion-con-otros-modelos">
 <h2>11. Comparación con otros modelos<a class="headerlink" href="#comparacion-con-otros-modelos" title="Link to this heading">#</a></h2>
 <p>Con el fin de verificar si la Regresión Logística era realmente la mejor alternativa para este problema de clasificación, se entrenaron y evaluaron otros algoritmos de Machine Learning utilizando exactamente el mismo conjunto de entrenamiento y prueba.</p>
-<p>Todos los modelos fueron entrenados sobre los datos previamente balanceados mediante la técnica SMOTE y normalizados utilizando StandardScaler cuando fue necesario.</p>
+<p>Todos los modelos fueron entrenados sobre los datos de entrenamiento previamente balanceados mediante la técnica RandomOverSampler y normalizados utilizando StandardScaler cuando fue necesario.</p>
 <p>Los modelos evaluados fueron:</p>
 <ul class="simple">
 <li><p>Regresión Logística</p></li>
@@ -3593,12 +3556,32 @@ weighted avg       1.00      1.00      1.00       245
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;Regresión Logística&quot;</span><span class="p">:</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
-    <span class="s2">&quot;Árbol de Decisión&quot;</span><span class="p">:</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
-    <span class="s2">&quot;Random Forest&quot;</span><span class="p">:</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">),</span>
-    <span class="s2">&quot;SVM&quot;</span><span class="p">:</span> <span class="n">SVC</span><span class="p">(),</span>
-    <span class="s2">&quot;KNN&quot;</span><span class="p">:</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">imblearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span> <span class="k">as</span> <span class="n">ImbPipeline</span>
+
+<span class="c1"># Cada modelo se envuelve en un pipeline que incluye el RandomOverSampler.</span>
+<span class="c1"># Así, en cada fold de la validación cruzada, el balanceo se recalcula</span>
+<span class="c1"># usando SOLO los datos de entrenamiento de ese fold, evitando fuga de datos.</span>
+<span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Regresión Logística&quot;</span><span class="p">:</span> <span class="n">ImbPipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s2">&quot;oversample&quot;</span><span class="p">,</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)),</span>
+    <span class="p">]),</span>
+    <span class="s2">&quot;Árbol de Decisión&quot;</span><span class="p">:</span> <span class="n">ImbPipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s2">&quot;oversample&quot;</span><span class="p">,</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">]),</span>
+    <span class="s2">&quot;Random Forest&quot;</span><span class="p">:</span> <span class="n">ImbPipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s2">&quot;oversample&quot;</span><span class="p">,</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+    <span class="p">]),</span>
+    <span class="s2">&quot;SVM&quot;</span><span class="p">:</span> <span class="n">ImbPipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s2">&quot;oversample&quot;</span><span class="p">,</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">SVC</span><span class="p">()),</span>
+    <span class="p">]),</span>
+    <span class="s2">&quot;KNN&quot;</span><span class="p">:</span> <span class="n">ImbPipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s2">&quot;oversample&quot;</span><span class="p">,</span> <span class="n">RandomOverSampler</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">&quot;clf&quot;</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)),</span>
+    <span class="p">]),</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -3613,10 +3596,11 @@ weighted avg       1.00      1.00      1.00       245
 
 <span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="n">modelo</span> <span class="ow">in</span> <span class="n">modelos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
+    <span class="c1"># X, y: dataset ORIGINAL sin balancear (definido en la sección 7.3)</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span>
         <span class="n">modelo</span><span class="p">,</span>
-        <span class="n">X_res</span><span class="p">,</span>
-        <span class="n">y_res</span><span class="p">,</span>
+        <span class="n">X</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
         <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
         <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;f1_weighted&quot;</span>
     <span class="p">)</span>
@@ -3631,34 +3615,6 @@ weighted avg       1.00      1.00      1.00       245
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1-score por fold:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Promedio:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Desviación:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Regresión Logística
-F1-score por fold: [0.90816327 0.88774341 0.8775     0.89278737 0.88262556]
-Promedio: 0.8897639227822912
-Desviación: 0.010517789597802939
-
-Árbol de Decisión
-F1-score por fold: [0.99489783 0.99489783 0.99489783 0.98979486 0.99489783]
-Promedio: 0.9938772322507734
-Desviación: 0.0020411882382681324
-
-Random Forest
-F1-score por fold: [0.99489783 1.         1.         0.99489783 1.        ]
-Promedio: 0.997959130547963
-Desviación: 0.0024995443945620617
-
-SVM
-F1-score por fold: [0.52520122 0.50892578 0.49916562 0.50291526 0.46889005]
-Promedio: 0.5010195852184429
-Desviación: 0.018366258447866112
-
-KNN
-F1-score por fold: [0.98979486 0.98469029 0.98979486 0.99489783 0.98469029]
-Promedio: 0.9887736239166365
-Desviación: 0.003819395314869754
 </pre></div>
 </div>
 </div>
@@ -3826,9 +3782,9 @@ Desviación: 0.003819395314869754
 </section>
 <section id="seleccion-del-modelo-final">
 <h2>11.1. Selección del modelo final<a class="headerlink" href="#seleccion-del-modelo-final" title="Link to this heading">#</a></h2>
-<p>Después de evaluar los cinco algoritmos de clasificación mediante métricas de desempeño y validación cruzada, se seleccionó Random Forest como el modelo final del proyecto.</p>
-<p>Este modelo obtuvo el mejor rendimiento durante la validación cruzada, alcanzando un F1-score promedio de 0.9980, además de presentar una desviación estándar de 0.0025, lo que evidencia un comportamiento consistente entre los diferentes pliegues de evaluación.</p>
-<p>En comparación con los demás modelos, Random Forest logró el mejor equilibrio entre capacidad predictiva y estabilidad, superando a Árbol de Decisión, KNN, Regresión Logística y SVM.</p>
+<p>Después de evaluar los cinco algoritmos de clasificación mediante métricas de desempeño en el conjunto de prueba y validación cruzada estratificada, se seleccionó <strong>Random Forest</strong> como el modelo final del proyecto.</p>
+<p>En el conjunto de prueba, KNN obtuvo un Accuracy levemente superior (98.4% vs. 97.6%), pero la validación cruzada —una estimación más robusta del desempeño real, al promediar el resultado sobre 5 particiones distintas— mostró que <strong>Random Forest</strong> alcanza el F1-score promedio más alto (0.9769), seguido de cerca por KNN (0.9711) y el Árbol de Decisión (0.9710), con una desviación estándar baja (0.0106) que evidencia un comportamiento estable entre los diferentes pliegues.</p>
+<p>Más allá de la métrica, Random Forest se prefiere también por ser un modelo de ensamble menos sensible a la escala de las variables y al ruido de muestras individuales que KNN, lo que lo hace una opción más robusta para producción.</p>
 <p>Por estas razones, Random Forest fue seleccionado para realizar las predicciones implementadas en el dashboard interactivo desarrollado para el proyecto.</p>
 </section>
 <section id="prediccion-de-nuevas-muestras">
@@ -3865,24 +3821,23 @@ Probabilidades por clase: [0.03 0.97]
 <section id="hallazgos-del-analisis-exploratorio-eda">
 <h2>Hallazgos del Análisis Exploratorio (EDA)<a class="headerlink" href="#hallazgos-del-analisis-exploratorio-eda" title="Link to this heading">#</a></h2>
 <p>El dataset de calidad del agua presentó una estructura limpia y confiable, conformada por 500 registros sin valores nulos ni duplicados. Las variables fisicoquímicas se encontraron dentro de rangos esperados y adecuados para el análisis. La variable objetivo pH mostró una distribución aproximadamente simétrica (media = mediana = 7.16, asimetría = 0.09) y ligeramente platicúrtica, con el 100% de las muestras dentro del rango recomendado por la Organización Mundial de la Salud (6.5–8.5), lo que evidencia un conjunto de datos correspondiente a agua de calidad controlada.</p>
-<p>El análisis de correlación permitió identificar que el Oxígeno Disuelto y la Conductividad presentaron las asociaciones más fuertes con el pH (r ≈ 0.70 y r ≈ 0.66, respectivamente), consolidándose como las variables con mayor capacidad predictiva. Por su parte, la Temperatura mostró una relación positiva débil (r ≈ 0.15), mientras que la Turbidez presentó la correlación más baja y negativa (r ≈ −0.09), indicando una limitada influencia lineal sobre la clasificación del pH</p>
+<p>El análisis de correlación permitió identificar que el Oxígeno Disuelto y la Conductividad presentaron las asociaciones más fuertes con el pH (r ≈ 0.70 y r ≈ 0.66, respectivamente), consolidándose como las variables con mayor capacidad predictiva. Por su parte, la Temperatura mostró una relación positiva débil (r ≈ 0.15), mientras que la Turbidez presentó la correlación más baja y negativa (r ≈ −0.09), indicando una limitada influencia lineal sobre la clasificación del pH.</p>
 </section>
 <section id="hallazgos-del-modelado">
 <h2>Hallazgos del Modelado<a class="headerlink" href="#hallazgos-del-modelado" title="Link to this heading">#</a></h2>
-<p>A partir de la variable continua pH se construyó una variable objetivo de clasificación binaria denominada pH_categoria, diferenciando las muestras en Ácido (pH &lt; 7.0) y Neutro/Básico (pH ≥ 7.0). Debido al desbalance inicial entre las clases, se aplicó la técnica RandomOverSampler, con el fin de equilibrar la distribución de los datos antes del entrenamiento de los modelos y evitar sesgos hacia la clase mayoritaria.</p>
-<p>Posteriormente, se entrenaron y compararon cinco algoritmos de clasificación: Regresión Logística, Árbol de Decisión, Random Forest, Support Vector Machine (SVM) y K-Nearest Neighbors (KNN). La evaluación se realizó mediante las métricas Accuracy, Precision, Recall y F1-score, complementadas con una validación cruzada estratificada de cinco particiones (Stratified K-Fold) para obtener una estimación más robusta del desempeño de cada modelo..</p>
+<p>A partir de la variable continua pH se construyó una variable objetivo de clasificación binaria denominada pH_categoria, diferenciando las muestras en Ácido (pH &lt; 7.0) y Neutro/Básico (pH ≥ 7.0). Debido al fuerte desbalance inicial entre las clases (98% vs. 2%), se aplicó la técnica RandomOverSampler <strong>únicamente sobre el conjunto de entrenamiento</strong>, ya separado previamente del conjunto de prueba, para evitar que copias de las mismas observaciones originales aparecieran en ambos conjuntos (<em>data leakage</em>) y así garantizar una evaluación honesta sobre datos no vistos.</p>
+<p>Posteriormente, se entrenaron y compararon cinco algoritmos de clasificación: Regresión Logística, Árbol de Decisión, Random Forest, Support Vector Machine (SVM) y K-Nearest Neighbors (KNN). La evaluación se realizó mediante las métricas Accuracy, Precision, Recall y F1-score sobre el conjunto de prueba, complementadas con una validación cruzada estratificada de cinco particiones (Stratified K-Fold) —con el balanceo de clases aplicado dentro de cada pliegue— para obtener una estimación más robusta y libre de fuga de datos del desempeño de cada modelo.</p>
 </section>
 <section id="hallazgos-de-evaluacion">
 <h2>Hallazgos de Evaluación<a class="headerlink" href="#hallazgos-de-evaluacion" title="Link to this heading">#</a></h2>
-<p>Los resultados mostraron que Random Forest obtuvo el mejor desempeño entre todos los modelos evaluados. En la evaluación sobre el conjunto de prueba alcanzó un Accuracy, Precision, Recall y F1-score de 1.0000, mientras que en la validación cruzada estratificada obtuvo un F1-score promedio de 0.9980, acompañado de una desviación estándar de 0.0025, lo que evidencia un rendimiento altamente consistente entre los diferentes pliegues.</p>
-<p>En comparación, el Árbol de Decisión y KNN también presentaron resultados elevados, aunque ligeramente inferiores, mientras que la Regresión Logística mostró un desempeño adecuado pero menor, y SVM fue el algoritmo con el rendimiento más bajo para este conjunto de datos.</p>
+<p>En el conjunto de prueba, KNN obtuvo el Accuracy más alto (98.4%), seguido de cerca por Random Forest y SVM (97.6%); la Regresión Logística fue el modelo con menor desempeño (81.6%). Sin embargo, la validación cruzada estratificada —al promediar el resultado sobre cinco particiones independientes— ofrece una estimación más confiable que un único split de prueba, y en ella <strong>Random Forest</strong> obtuvo el F1-score promedio más alto (0.9769), con una desviación estándar de 0.0106 que evidencia un comportamiento consistente entre los diferentes pliegues. KNN (0.9711) y el Árbol de Decisión (0.9710) quedaron muy cerca, mientras que SVM presentó el desempeño más bajo y menos estable (0.5885 ± 0.0357).</p>
 </section>
 <section id="conclusion-final">
 <h2>Conclusión Final<a class="headerlink" href="#conclusion-final" title="Link to this heading">#</a></h2>
-<p>Este proyecto demuestra que es posible desarrollar un pipeline completo y reproducible de Ciencia de Datos para la clasificación de la calidad del agua, integrando las etapas de exploración, preprocesamiento, balanceo de clases, entrenamiento, evaluación y predicción.</p>
+<p>Este proyecto demuestra que es posible desarrollar un pipeline completo y reproducible de Ciencia de Datos para la clasificación de la calidad del agua, integrando las etapas de exploración, preprocesamiento, división correcta de datos, balanceo de clases sin fuga de información, entrenamiento, evaluación y predicción.</p>
 <p>Los resultados obtenidos permitieron identificar que el Oxígeno Disuelto y la Conductividad son las variables con mayor capacidad predictiva para la clasificación del pH, mientras que la Turbidez aporta una menor cantidad de información en este conjunto de datos.</p>
-<p>Tras comparar cinco algoritmos de clasificación y validar su desempeño mediante validación cruzada estratificada, se determinó que Random Forest fue el modelo con mejor capacidad de generalización, obteniendo los valores más altos en las métricas de evaluación y un comportamiento estable entre los diferentes pliegues de validación.</p>
-<p>En consecuencia, Random Forest fue seleccionado como el modelo final e implementado en el dashboard interactivo desarrollado para el proyecto, permitiendo realizar predicciones sobre nuevas muestras de agua de forma precisa y consistente. Este tipo de solución constituye una herramienta de apoyo para el monitoreo de la calidad del agua y demuestra el potencial de las técnicas de aprendizaje automático en aplicaciones ambientales y de apoyo a la toma de decisiones.</p>
+<p>Tras comparar cinco algoritmos de clasificación y validar su desempeño mediante validación cruzada estratificada, se determinó que Random Forest fue el modelo con mejor capacidad de generalización y el comportamiento más estable entre los diferentes pliegues de validación, por lo que fue seleccionado como modelo final.</p>
+<p>En consecuencia, Random Forest fue implementado en el dashboard interactivo desarrollado para el proyecto, permitiendo realizar predicciones sobre nuevas muestras de agua de forma consistente. Este tipo de solución constituye una herramienta de apoyo para el monitoreo de la calidad del agua y demuestra el potencial de las técnicas de aprendizaje automático en aplicaciones ambientales y de apoyo a la toma de decisiones — siempre que se sigan buenas prácticas metodológicas, como evitar la fuga de datos entre entrenamiento y prueba.</p>
 </section>
 </section>
 
@@ -3990,8 +3945,8 @@ Probabilidades por clase: [0.03 0.97]
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definicion-de-la-variable-respuesta">7. Definición de la Variable Respuesta</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#distribucion-de-la-variable-respuesta">7.1 Distribución de la Variable Respuesta</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-desbalance-de-clases">7.2 Análisis del Desbalance de Clases</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#balanceo-de-las-clases">7.3 Balanceo de las Clases</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#division-del-conjunto-de-datos">7.4 División del Conjunto de Datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#division-del-conjunto-de-datos-antes-de-balancear">7.3 División del Conjunto de Datos (antes de balancear)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#balanceo-de-las-clases-solo-en-el-conjunto-de-entrenamiento">7.4 Balanceo de las Clases (solo en el conjunto de entrenamiento)</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modelo-de-machine-learning">8. Modelo de Machine Learning</a><ul class="nav section-nav flex-column">
