@@ -1,6 +1,6 @@
 """
 train_model.py
-Entrena una Regresión Logística para clasificar la calidad del pH del agua
+Entrena un modelo Random Forest para clasificar la categoría del pH del agua
 y guarda el modelo como model/model.pkl.
 """
 
@@ -8,10 +8,15 @@ import os
 import pandas as pd
 import joblib
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import (
+    train_test_split,
+    StratifiedKFold,
+    cross_val_score,
+)
 from sklearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTE
+
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -31,7 +36,7 @@ DATA_PATH = os.path.join(
     BASE_DIR,
     "..",
     "data",
-    "Water_Quality_testing.csv"
+    "Water_Quality_testing.csv",
 )
 
 MODEL_PATH = os.path.join(BASE_DIR, "model.pkl")
@@ -45,10 +50,8 @@ FEATURES = [
     "Temperature (°C)",
     "Turbidity (NTU)",
     "Dissolved Oxygen (mg/L)",
-    "Conductivity (µS/cm)"
+    "Conductivity (µS/cm)",
 ]
-
-
 
 TARGET = "ph_category"
 
@@ -78,6 +81,7 @@ def train_and_save():
     X = df[FEATURES]
     y = df[TARGET]
 
+    # División entrenamiento / prueba
     X_train, X_test, y_train, y_test = train_test_split(
         X,
         y,
@@ -86,41 +90,103 @@ def train_and_save():
         stratify=y,
     )
 
+    # ========================================================
+    # Balanceo de clases (SMOTE)
+    # ========================================================
+
+    smote = SMOTE(random_state=42)
+
+    X_train, y_train = smote.fit_resample(
+        X_train,
+        y_train,
+    )
+
+    # ========================================================
+    # Modelo
+    # ========================================================
+
     pipeline = Pipeline([
-        ("scaler", StandardScaler()),
-        ("clf", LogisticRegression(max_iter=500, random_state=42)),
+        (
+            "clf",
+            RandomForestClassifier(
+                n_estimators=100,
+                random_state=42,
+            ),
+        )
     ])
 
+    # Entrenamiento
     pipeline.fit(X_train, y_train)
+
+    # ========================================================
+    # Validación Cruzada
+    # ========================================================
+
+    cv = StratifiedKFold(
+        n_splits=5,
+        shuffle=True,
+        random_state=42,
+    )
+
+    cv_scores = cross_val_score(
+        pipeline,
+        X_train,
+        y_train,
+        cv=cv,
+        scoring="f1_weighted",
+    )
+
+    # ========================================================
+    # Predicciones
+    # ========================================================
 
     y_pred = pipeline.predict(X_test)
     y_proba = pipeline.predict_proba(X_test)[:, 1]
 
+    # ========================================================
+    # Métricas
+    # ========================================================
+
     metrics = {
 
         "accuracy": round(
-            accuracy_score(y_test, y_pred), 4
+            accuracy_score(y_test, y_pred),
+            4,
         ),
 
         "precision": round(
-            precision_score(y_test, y_pred), 4
+            precision_score(y_test, y_pred),
+            4,
         ),
 
         "recall": round(
-            recall_score(y_test, y_pred), 4
+            recall_score(y_test, y_pred),
+            4,
         ),
 
         "f1": round(
-            f1_score(y_test, y_pred), 4
+            f1_score(y_test, y_pred),
+            4,
         ),
 
         "roc_auc": round(
-            roc_auc_score(y_test, y_proba), 4
+            roc_auc_score(y_test, y_proba),
+            4,
+        ),
+
+        "cv_f1_mean": round(
+            cv_scores.mean(),
+            4,
+        ),
+
+        "cv_f1_std": round(
+            cv_scores.std(),
+            4,
         ),
 
         "confusion_matrix": confusion_matrix(
             y_test,
-            y_pred
+            y_pred,
         ).tolist(),
 
         "y_test": y_test.tolist(),
@@ -132,6 +198,10 @@ def train_and_save():
         "target": TARGET,
     }
 
+    # ========================================================
+    # Guardar modelo
+    # ========================================================
+
     joblib.dump(
         {
             "pipeline": pipeline,
@@ -139,6 +209,10 @@ def train_and_save():
         },
         MODEL_PATH,
     )
+
+    # ========================================================
+    # Resultados
+    # ========================================================
 
     print("\n===================================")
     print("Modelo entrenado correctamente")
@@ -149,6 +223,10 @@ def train_and_save():
     print(f"Recall   : {metrics['recall']}")
     print(f"F1 Score : {metrics['f1']}")
     print(f"ROC AUC  : {metrics['roc_auc']}")
+
+    print("\n===== Validación Cruzada =====")
+    print(f"F1 promedio : {metrics['cv_f1_mean']}")
+    print(f"Desviación  : {metrics['cv_f1_std']}")
 
     print(f"\nModelo guardado en:\n{MODEL_PATH}")
 

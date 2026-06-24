@@ -17,15 +17,16 @@ PASTEL = ["#AED9E0", "#FFB7B2", "#B5EAD7", "#FFDAC1", "#C7CEEA"]
 
 def _pipeline_diagram() -> go.Figure:
     """Diagrama de flujo del pipeline de ML."""
+
     steps = [
-    "Datos CSV",
-    "Limpieza",
-    "Balanceo\n(SMOTE)",
-    "Train/Test",
-    "StandardScaler",
-    "Regresión\nLogística",
-    "Evaluación"
-]
+        "Datos CSV",
+        "Limpieza",
+        "Balanceo\n(RandomOverSampler)",
+        "Train/Test",
+        "Random\nForest",
+        "Evaluación",
+        "Predicción"
+    ]
     x_pos  = list(range(len(steps)))
     colors = PASTEL * 2
 
@@ -85,7 +86,7 @@ def layout() -> html.Div:
 
 html.P([
     html.Strong("Preprocesamiento: "),
-    "Se realizó limpieza de datos, tratamiento de valores faltantes y balanceo de clases mediante la técnica SMOTE antes del entrenamiento del modelo."
+    "Se realizó limpieza de datos, tratamiento de valores faltantes y balanceo de clases mediante RandomOverSampler antes del entrenamiento de los modelos."
 ]),
                             html.P([html.Strong("Variables: "), "5 fisicoquímicas + 1 objetivo (pH)."]),
                             html.P([html.Strong("Variable respuesta: "),
@@ -125,70 +126,70 @@ html.P([
         # ── Modelo ────────────────────────────────────────────────────────────
         dbc.Row([
             dbc.Col(dbc.Card([
-                dbc.CardHeader(html.H5("🧠 Regresión Logística",
+                dbc.CardHeader(html.H5("🧠 Random Forest",
                                        className="mb-0 fw-bold")),
                 dbc.CardBody([
                     html.P(
-    "Se entrenó un modelo de Regresión Logística utilizando un conjunto de datos balanceado mediante SMOTE. "
-    "El objetivo fue clasificar las muestras de agua como Ácidas o Neutro/Alcalinas reduciendo el sesgo provocado por el desbalance de clases."
+    "Se entrenaron cinco algoritmos de clasificación (Regresión Logística, Árbol de Decisión, Random Forest, SVM y KNN). "
+    "Tras comparar su desempeño mediante Accuracy, Precision, Recall, F1-score y validación cruzada estratificada, "
+    "Random Forest fue seleccionado como modelo final al obtener el mejor rendimiento y una alta capacidad de generalización."
 ),
-                    html.H6("Función Sigmoide:", className="fw-bold mt-3"),
-                    html.Div([
-                        html.Code("P(y=1|X) = 1 / (1 + e^(-z))",
-                                  style={"fontSize": "1.1rem",
-                                         "backgroundColor": "#f0f4f8",
-                                         "padding": "8px 14px",
-                                         "borderRadius": "8px",
-                                         "display": "block"}),
-                        html.Small("donde  z = β₀ + β₁·pH + β₂·Temp + β₃·Turbidez + β₄·O₂ + β₅·Cond.",
-                                   className="text-muted d-block mt-2"),
-                    ]),
+                    
                     html.H6("Configuración:", className="fw-bold mt-3"),
-                    dbc.ListGroup([
-    dbc.ListGroupItem("Balanceo de clases: SMOTE"),
-    dbc.ListGroupItem("Normalización: StandardScaler"),
-    dbc.ListGroupItem("Modelo: Regresión Logística"),
-    dbc.ListGroupItem("Solver: lbfgs"),
-    dbc.ListGroupItem("Máximo de iteraciones: 500"),
+    dbc.ListGroup([
+    dbc.ListGroupItem("Balanceo de clases: RandomOverSampler"),
+    dbc.ListGroupItem("Modelo final: Random Forest"),
+    dbc.ListGroupItem("Número de árboles: 100"),
+    dbc.ListGroupItem("Criterio: Gini"),
+    dbc.ListGroupItem("Validación cruzada: Stratified K-Fold (k=5)"),
     dbc.ListGroupItem("División entrenamiento/prueba: 75% / 25%"),
 ], flush=True),
-html.H6("¿Por qué aplicar SMOTE?", className="fw-bold mt-4"),
+html.H6("¿Por qué aplicar RandomOverSampler?", className="fw-bold mt-4"),
 
 html.P(
     "Inicialmente la variable objetivo presentaba un desbalance entre las clases. "
-    "Para evitar que el modelo favoreciera la clase mayoritaria se aplicó la técnica "
-    "SMOTE (Synthetic Minority Over-sampling Technique), generando nuevas muestras "
-    "sintéticas de la clase minoritaria antes del entrenamiento."
+    "Para evitar que el modelo favoreciera la clase mayoritaria se aplicó "
+    "RandomOverSampler, equilibrando el número de muestras de cada clase antes del entrenamiento de los modelos."
 ),
                 ])
             ], style=CARD_STYLE), md=6),
 
             dbc.Col(dbc.Card([
-                dbc.CardHeader(html.H5("🎯 ¿Por qué Regresión Logística?",
+                dbc.CardHeader(html.H5("🎯 ¿Por qué Random Forest?",
                                        className="mb-0 fw-bold")),
                 dbc.CardBody([
                     dbc.ListGroup([
-                        dbc.ListGroupItem([
-                            html.Strong("✅ Interpretable: "),
-                            "Los coeficientes revelan el impacto de cada variable."
-                        ]),
-                        dbc.ListGroupItem([
-                            html.Strong("✅ Eficiente: "),
-                            "Ideal para datasets pequeños/medianos como el nuestro."
-                        ]),
-                        dbc.ListGroupItem([
-                            html.Strong("✅ Probabilístico: "),
-                            "Entrega la probabilidad de cada clase, no solo la etiqueta."
-                        ]),
-                        dbc.ListGroupItem([
-                            html.Strong("✅ Estable: "),
-                            "Converge rápidamente con datos normalizados."
-                        ]),
-                        dbc.ListGroupItem([
-                            html.Strong("✅ Línea base sólida: "),
-                            "Referencia clara antes de modelos más complejos."
-                        ]),
-                    ], flush=True),
+    dbc.ListGroupItem([
+        html.Strong("✅ Mayor precisión: "),
+        "Obtuvo el mejor desempeño entre los modelos evaluados."
+    ]),
+    dbc.ListGroupItem([
+        html.Strong("✅ Robusto: "),
+        "Reduce el sobreajuste al combinar múltiples árboles de decisión."
+    ]),
+    dbc.ListGroupItem([
+        html.Strong("✅ Generalización: "),
+        "Presentó un excelente rendimiento durante la validación cruzada."
+    ]),
+    dbc.ListGroupItem([
+        html.Strong("✅ Manejo de variables: "),
+        "No requiere normalización previa de los datos."
+    ]),
+    dbc.ListGroupItem([
+        html.Strong("✅ Modelo seleccionado: "),
+        "Fue elegido como modelo final del proyecto por obtener el mejor desempeño."
+    ]),
+], flush=True),
+
+html.Hr(),
+
+html.P([
+    html.Strong("Resultado de la validación cruzada:"),
+    html.Br(),
+    "F1-score promedio: 0.9646",
+    html.Br(),
+    "Desviación estándar: 0.0117"
+]),
                     html.Hr(),
                     html.P([
                         html.Strong("Clases del modelo: "),

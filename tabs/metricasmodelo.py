@@ -92,6 +92,9 @@ def layout() -> html.Div:
     """Layout de la pestaña Métricas del Modelo."""
     data = _load_model()
 
+    print("Modelo cargado:")
+    print(data)
+
     if data is None:
         return html.Div([
             dbc.Alert([
@@ -102,6 +105,17 @@ def layout() -> html.Div:
 
     m = data["metrics"]
 
+    print("\n====================")
+    print("MÉTRICAS CARGADAS")
+
+    for k, v in m.items():
+        if k not in ["y_test", "y_proba", "confusion_matrix"]:
+            print(k, ":", v)
+
+    print("Confusion Matrix:")
+    print(m["confusion_matrix"])
+    print("====================\n")
+
     return html.Div([
 
         # ── Título ────────────────────────────────────────────────────────────
@@ -109,9 +123,9 @@ def layout() -> html.Div:
             html.H2("📈 Métricas del Modelo", className="fw-bold mb-1",
                     style={"color": "#2c3e50"}),
             html.P(
-    "Evaluación del modelo de Regresión Logística entrenado sobre un conjunto de datos balanceado mediante SMOTE.",
-    className="text-muted",
-),
+                "Evaluación del modelo Random Forest seleccionado como modelo final tras la comparación de algoritmos y la validación cruzada.",
+                className="text-muted",
+            ),
             html.Hr(),
         ]), className="mb-4"),
 
@@ -122,98 +136,103 @@ def layout() -> html.Div:
             dbc.Col(_badge("Recall",    m["recall"],    PASTEL[3]), md=3),
             dbc.Col(_badge("F1-Score",  m["f1"],        PASTEL[4]), md=3),
         ], className="mb-4 g-3"),
-dbc.Row(
-    dbc.Col(
-        dbc.Alert([
-            html.H5("✅ Modelo entrenado con SMOTE", className="alert-heading"),
-            html.P(
-                "Antes del entrenamiento se aplicó SMOTE para equilibrar las clases de la variable objetivo. "
-                "Esto permitió reducir el sesgo hacia la clase mayoritaria y mejorar la capacidad de clasificación."
-            ),
-        ], color="info"),
-    ),
-    className="mb-4",
-),
-        dbc.Row(dbc.Col(dbc.Card(dbc.CardBody([
-            html.Div([
-                html.Span("ROC-AUC: ", className="fw-bold"),
-                html.Span(f"{m['roc_auc']:.4f}",
-                          style={"fontSize": "1.3rem", "color": "#2980b9",
-                                 "fontWeight": "700"}),
-                html.Small(" — Cuanto más cercano a 1.0, mejor discrimina el modelo.",
-                           className="text-muted ms-2"),
-            ])
-        ]), style={**CARD_STYLE, "backgroundColor": "#EBF5FB"}),
-        ), className="mb-4"),
 
-        # ── ROC + Confusion Matrix ─────────────────────────────────────────
+        dbc.Row(
+            dbc.Col(
+                dbc.Alert([
+                    html.H5("✅ Modelo final: Random Forest", className="alert-heading"),
+                    html.P(
+                        "Después de comparar cinco algoritmos de clasificación y aplicar validación cruzada estratificada, "
+                        "Random Forest fue seleccionado como modelo final por su mejor desempeño."
+                    ),
+                ], color="success"),
+            ),
+            className="mb-4",
+        ),
+
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody([
+                        html.Div([
+                            html.Span("ROC-AUC: ", className="fw-bold"),
+                            html.Span(
+                                f"{m['roc_auc']:.4f}",
+                                style={
+                                    "fontSize": "1.3rem",
+                                    "color": "#2980b9",
+                                    "fontWeight": "700"
+                                }
+                            ),
+                            html.Small(
+                                " — Cuanto más cercano a 1.0, mejor discrimina el modelo.",
+                                className="text-muted ms-2"
+                            ),
+                        ])
+                    ]),
+                    style={**CARD_STYLE, "backgroundColor": "#EBF5FB"},
+                ),
+            ),
+            className="mb-4"
+        ),
+
+        # ROC + CM
         dbc.Row([
             dbc.Col(dbc.Card(dbc.CardBody(
                 dcc.Graph(
                     figure=_fig_roc(m["y_test"], m["y_proba"], m["roc_auc"]),
-                    config=PLOT_CFG, style={"height": "380px"},
+                    config=PLOT_CFG,
+                    style={"height": "380px"},
                 )
             ), style=CARD_STYLE), md=7),
 
             dbc.Col(dbc.Card(dbc.CardBody(
                 dcc.Graph(
                     figure=_fig_cm(m["confusion_matrix"]),
-                    config=PLOT_CFG, style={"height": "380px"},
+                    config=PLOT_CFG,
+                    style={"height": "380px"},
                 )
             ), style=CARD_STYLE), md=5),
         ], className="mb-4 g-3"),
-        dbc.Row(
-    dbc.Col(
-        dbc.Card(
-            dbc.CardBody([
-                html.H5("📊 Interpretación de la Curva ROC", className="fw-bold"),
-                html.P(
-                    "La curva ROC muestra la capacidad del modelo para diferenciar entre las clases "
-                    "Ácido y Neutro/Alcalino en distintos umbrales de decisión."
-                ),
-                html.P(
-                    "El valor AUC obtenido indica una excelente capacidad discriminativa, "
-                    "confirmando que el modelo mantiene un buen equilibrio entre sensibilidad y especificidad."
-                ),
-            ]),
-            style=CARD_STYLE,
-        )
-    ),
-    className="mb-4",
-),
 
-        # ── Interpretación ────────────────────────────────────────────────────
-        dbc.Row(dbc.Col(dbc.Card([
-            dbc.CardHeader(html.H5("💡 Interpretación de Resultados",
-                                   className="mb-0 fw-bold")),
-            dbc.CardBody(dbc.Row([
-                dbc.Col([
-                    html.H6("Accuracy", className="fw-bold"),
-                    html.P(
-    "Porcentaje total de predicciones correctas. Después del balanceo mediante SMOTE, "
-    "esta métrica representa de forma más confiable el desempeño general del modelo.",
-    className="small",
-),
-                ], md=3),
-                dbc.Col([
-                    html.H6("Precision", className="fw-bold"),
-                    html.P("De todas las muestras clasificadas como Neutro/Alcalino, "
-                           "¿cuántas lo eran realmente? Mide los falsos positivos.",
-                           className="small"),
-                ], md=3),
-                dbc.Col([
-                    html.H6("Recall", className="fw-bold"),
-                    html.P("De todas las muestras realmente Neutro/Alcalino, "
-                           "¿cuántas detectó el modelo? Mide los falsos negativos.",
-                           className="small"),
-                ], md=3),
-                dbc.Col([
-                    html.H6("F1-Score", className="fw-bold"),
-                    html.P("Media armónica entre Precision y Recall. "
-                           "Es la métrica más equilibrada cuando ambas importan.",
-                           className="small"),
-                ], md=3),
-            ]))
-        ], style=CARD_STYLE))),
+        # Validación cruzada
+        dbc.Row(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H5("🔁 Validación Cruzada", className="fw-bold"),
+
+                        html.P([
+                            html.Strong("Método: "),
+                            "Stratified K-Fold (5 particiones)"
+                        ]),
+
+                        html.P([
+                            html.Strong("F1-score promedio: "),
+                            html.Span(
+                                f"{m['cv_f1_mean']:.4f}",
+                                style={
+                                    "color": "#27ae60",
+                                    "fontWeight": "700",
+                                    "fontSize": "1.1rem"
+                                }
+                            )
+                        ]),
+
+                        html.P([
+                            html.Strong("Desviación estándar: "),
+                            f"{m['cv_f1_std']:.4f}"
+                        ]),
+
+                        html.Small(
+                            "Resultados consistentes entre folds.",
+                            className="text-muted"
+                        )
+                    ]),
+                    style=CARD_STYLE
+                )
+            ),
+            className="mb-4",
+        ),
 
     ], style={"padding": "24px"})

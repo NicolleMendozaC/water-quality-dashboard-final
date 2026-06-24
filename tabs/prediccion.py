@@ -64,11 +64,11 @@ dbc.Alert(
     [
         html.H5("🤖 Predicción mediante Machine Learning", className="alert-heading"),
         html.P(
-            "Esta herramienta utiliza un modelo de Regresión Logística entrenado con un conjunto de datos balanceado mediante SMOTE. "
-            "Ingrese los valores de la muestra para estimar su categoría de pH."
+            "Esta herramienta utiliza el modelo Random Forest, seleccionado como el mejor algoritmo tras la comparación de modelos y la validación cruzada. "
+            "Ingrese los valores de la muestra para estimar la categoría del pH."
         ),
     ],
-    color="info",
+    color="success",
     className="mb-4",
 ),
         # ── Alerta si no hay modelo ───────────────────────────────────────────
